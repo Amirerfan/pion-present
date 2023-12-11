@@ -1,0 +1,24 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+* {
+  @apply box-border m-0 p-0;
+}
+
+body {
+  @apply h-full bg-body-bg;
+}
+
+.page {
+  @apply max-h-screen overflow-y-auto overscroll-y-contain snap-y snap-mandatory;
+
+  &__section {
+    @apply w-full h-screen snap-center;
+  }
+}
+
+.pion-logo {
+  mask: url('../public/assets/images/home/more-about-pion-logo.svg') no-repeat center;
+  -webkit-mask: url('../public/assets/images/home/more-about-pion-logo.svg') no-repeat center;
+}
