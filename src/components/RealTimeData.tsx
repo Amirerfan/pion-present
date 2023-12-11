@@ -1,11 +1,12 @@
 import TextArea from "./TextInput";
 import {useCallback, useEffect, useMemo, useState} from "react";
 import useRealTimeData from "../contexts/RealTimeData/useRealTimeData.ts";
+import {toast} from 'react-toastify';
 
 const RealTimeData = () => {
-	const {message, setMessage, getChatGPTResponse, loading, response} = useRealTimeData();
+	const {message, setMessage, getChatGPTResponse, loading, response, error} = useRealTimeData();
 
-	const [result, setResult] = useState('');
+	const [result, setResult] = useState<boolean | null>(null);
 	const [showFirstLine, setShowFirstLine] = useState(false);
 	const [showSecondLine, setShowSecondLine] = useState(false);
 	const [showThirdLine, setShowThirdLine] = useState(false);
@@ -15,25 +16,36 @@ const RealTimeData = () => {
 			setShowFirstLine(true);
 			setShowSecondLine(false);
 			setShowThirdLine(false);
-			setResult('');
-		} else {
-			if (response != '') {
-				setShowSecondLine(true);
-				setTimeout(() => {
-					setShowThirdLine(true);
-				}, 1000);
-				setTimeout(() => {
-					setResult(response);
-				}, 1300);
-			} else {
-				setShowFirstLine(false);
-				setShowSecondLine(false);
-				setShowThirdLine(false);
-				setResult('')
-			}
+			setResult(null);
 		}
+	}, [loading]);
 
-	}, [response, loading]);
+	useEffect(() => {
+		if (response !== null) {
+			setShowSecondLine(true);
+			setTimeout(() => {
+				setShowThirdLine(true);
+				setResult(response);
+			}, 1000);
+		}
+	}, [response]);
+
+	useEffect(() => {
+		if (error) {
+			setShowFirstLine(false);
+			setShowSecondLine(false);
+			setShowThirdLine(false);
+			toast.error('Something went wrong! please try again.', {
+				position: "bottom-right",
+				theme: 'dark',
+				style: {
+					backgroundColor: '#4D3E9E',
+					color: '#fff',
+					marginRight: '12px',
+				}
+			});
+		}
+	}, [error]);
 
 
 	const [hoverState, setHoverState] = useState(false);
@@ -88,8 +100,9 @@ const RealTimeData = () => {
 							          placeholder='Example: Did real Madrid win the last El Clásico? answer with true or false only'
 							          onChange={setMessage} value={message}/>
 							<button
+								disabled={message === '' || loading}
 								onClick={() => getChatGPTResponse()}
-								className='pl-9 pr-8 py-4 text-primary bg-primary-l3 rounded-lg flex items-center ml-auto text-xl font-semibold'> Submit
+								className='pl-9 pr-8 py-4 text-primary disabled:cursor-not-allowed bg-primary-l3 rounded-lg flex items-center ml-auto text-xl font-semibold'> Submit
 								<img src='/assets/images/home/send-icon.svg' alt='' className='ml-3'/>
 							</button>
 						</div>
@@ -118,11 +131,11 @@ const RealTimeData = () => {
                     </p>}
 							</div>
 							<div>
-								{result === '' ? <div className='flex items-center w-full text-primary-l3 gap-2'>
+								{result === null ? <div className='flex items-center w-full text-primary-l3 gap-2'>
 									<img src='/assets/images/home/right-double-arrow.svg' alt=''/> <p>...</p>
 								</div> : <div className='flex items-center w-full gap-2'>
 									<img src='/assets/images/home/right-double-arrow.svg' alt=''/><p
-									className='font-medium text-primary-l3'>{result}</p>
+									className='font-medium text-primary-l3'>{result ? 'True' : 'False'}</p>
 								</div>}
 							</div>
 						</div>
