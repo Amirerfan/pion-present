@@ -2,17 +2,20 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Home from "./pages/Home";
 import {Web3Provider} from "./contexts/Web3/Web3Context";
 import {CostEfficiencyProvider} from "./contexts/CostEfficiency/CostEfficiencyContext.tsx";
+import {RealTimeDataProvider} from "./contexts/RealTimeData/RealTimeDataContext.tsx";
 
 function App() {
 	return (
 		<div className="App">
 			<Web3Provider>
 				<CostEfficiencyProvider>
-					<BrowserRouter>
-						<Routes>
-							<Route path="/" element={<Home/>}/>
-						</Routes>
-					</BrowserRouter>
+					<RealTimeDataProvider>
+						<BrowserRouter>
+							<Routes>
+								<Route path="/" element={<Home/>}/>
+							</Routes>
+						</BrowserRouter>
+					</RealTimeDataProvider>
 				</CostEfficiencyProvider>
 			</Web3Provider>
 		</div>

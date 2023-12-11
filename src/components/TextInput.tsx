@@ -2,7 +2,7 @@ const TextArea = ({placeholder, value, onChange, className}: {
 	className?: string,
 	placeholder: string,
 	value: string,
-	onChange: (e: any) => void
+	onChange: (e: string) => void
 }) => {
 	return (
 		<textarea

@@ -5,7 +5,8 @@ import {createPublicClient, http} from 'viem'
 import {GAS_CONSUMPTION_ADDRESSES} from "../../constants/addresses.ts";
 import {getCurrentChainId} from "../../constants/chains.ts";
 import {goerli} from "wagmi/chains";
-import {formatUnits} from "ethers";
+import * as solanaWeb3 from "@solana/web3.js";
+import {Buffer} from 'buffer';
 
 const CostEfficiencyContext = createContext<{
 	gasPrice: bigint;
@@ -63,6 +64,39 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 	const account = '0xf39fd6e51aad88f6f4ce6ab8827279cff2b92266';
 
 	const [gasPrice, setGasPrice] = useState(BigInt(0));
+
+
+	const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('testnet'));
+
+	const programId = new solanaWeb3.PublicKey('DBYZWu2VUr2LypbdN3dh6GKKGxRCi2cyEXGRjPByMTZf');
+	const argumentValue = 5;
+	const encodedArgument = Buffer.from([argumentValue]);
+
+	const instruction = new solanaWeb3.TransactionInstruction({
+		keys: [],
+		programId: programId,
+		data: encodedArgument 
+	});
+
+	const estimateSolana = useCallback(async () => {
+		
+		const transaction = new solanaWeb3.Transaction().add(instruction);
+		
+		const { blockhash } = await connection.getLatestBlockhash();
+		transaction.recentBlockhash = blockhash;
+
+		const feeCalculator = await connection.getFeeCalculatorForBlockhash(blockhash);
+		console.log(transaction)
+		const fee = feeCalculator.value!.lamportsPerSignature * transaction.signatures.length;
+	
+		console.log('Estimated fee (in lamports):', fee);
+	}, [connection, instruction]);
+	
+	
+	useEffect(() => {
+		estimateSolana();
+	}, [estimateSolana]);
+	
 
 	useEffect(() => {
 		publicClient.getGasPrice().then((gasPrice) => {

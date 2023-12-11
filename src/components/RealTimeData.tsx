@@ -1,34 +1,40 @@
 import TextArea from "./TextInput";
 import {useCallback, useEffect, useMemo, useState} from "react";
+import useRealTimeData from "../contexts/RealTimeData/useRealTimeData.ts";
 
 const RealTimeData = () => {
-	const [question, setQuestion] = useState('');
-	const [result, setResult] = useState('');
-	const [loading, setLoading] = useState(false);
+	const {message, setMessage, getChatGPTResponse, loading, response} = useRealTimeData();
 
+	const [result, setResult] = useState('');
 	const [showFirstLine, setShowFirstLine] = useState(false);
 	const [showSecondLine, setShowSecondLine] = useState(false);
 	const [showThirdLine, setShowThirdLine] = useState(false);
 
-	const submitQuestion = () => {
-		setLoading(true)
-		setShowFirstLine(false);
-		setShowSecondLine(false);
-		setShowThirdLine(false);
-		setResult('');
+	useEffect(() => {
+		if (loading) {
+			setShowFirstLine(true);
+			setShowSecondLine(false);
+			setShowThirdLine(false);
+			setResult('');
+		} else {
+			if (response != '') {
+				setShowSecondLine(true);
+				setTimeout(() => {
+					setShowThirdLine(true);
+				}, 1000);
+				setTimeout(() => {
+					setResult(response);
+				}, 1300);
+			} else {
+				setShowFirstLine(false);
+				setShowSecondLine(false);
+				setShowThirdLine(false);
+				setResult('')
+			}
+		}
 
-		setShowFirstLine(true);
-		setTimeout(() => {
-			setShowSecondLine(true);
-		}, 2000);
-		setTimeout(() => {
-			setShowThirdLine(true);
-		}, 3000);
-		setTimeout(() => {
-			setLoading(false);
-			setResult('YES');
-		}, 3200);
-	}
+	}, [response, loading]);
+
 
 	const [hoverState, setHoverState] = useState(false);
 
@@ -44,7 +50,7 @@ const RealTimeData = () => {
 	const windowHeight = useMemo(() => window.innerHeight, []);
 	const [offset, setOffset] = useState(0);
 
-	const onScroll = useCallback((event: any) => {
+	const onScroll = useCallback(() => {
 		setOffset(Math.round(document.getElementById('page')?.scrollTop || 0));
 
 		if (offset > 3 * windowHeight / 2) {
@@ -80,9 +86,9 @@ const RealTimeData = () => {
 								TRUE/FALSE state</p>
 							<TextArea className='mb-7 resize-none h-28 p-4 py-5 text-sm placeholder-xyz-75 text-white'
 							          placeholder='Example: Did real Madrid win the last El Clásico? answer with true or false only'
-							          onChange={(value) => setQuestion(value)} value={question}/>
+							          onChange={setMessage} value={message}/>
 							<button
-								onClick={submitQuestion}
+								onClick={() => getChatGPTResponse()}
 								className='pl-9 pr-8 py-4 text-primary bg-primary-l3 rounded-lg flex items-center ml-auto text-xl font-semibold'> Submit
 								<img src='/assets/images/home/send-icon.svg' alt='' className='ml-3'/>
 							</button>
@@ -112,7 +118,7 @@ const RealTimeData = () => {
                     </p>}
 							</div>
 							<div>
-								{loading ? <div className='flex items-center w-full text-primary-l3 gap-2'>
+								{result === '' ? <div className='flex items-center w-full text-primary-l3 gap-2'>
 									<img src='/assets/images/home/right-double-arrow.svg' alt=''/> <p>...</p>
 								</div> : <div className='flex items-center w-full gap-2'>
 									<img src='/assets/images/home/right-double-arrow.svg' alt=''/><p
