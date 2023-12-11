@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import useCostEfficiency from "../contexts/CostEfficiency/useCostEfficiency.ts";
 
 const CostEfficiency = () => {
 
@@ -13,8 +14,21 @@ const CostEfficiency = () => {
 		});
 	}, []);
 
+	const {
+		gasPrice,
+		ETHFibonacci5thGasFee,
+		ETHFibonacciNthGasFee,
+		ETHSumOfSeries5GasFee,
+		ETHSumOfSeriesNGasFee,
+		fibonacciNth,
+		sumOfSeriesN,
+		setFibonacciNth,
+		setSumOfSeriesN,
+	} = useCostEfficiency();
+
 	return (
-		<div id='cost-efficiency' className='cost-efficiency flex flex-col w-full h-full items-center relative justify-center'>
+		<div id='cost-efficiency'
+		     className='cost-efficiency flex flex-col w-full h-full items-center relative justify-center'>
 			<table className={`table rounded-3xl overflow-hidden transition-all ${hoverState && '-translate-y-12'}`}>
 				<thead className='bg-element-header'>
 				<tr>
@@ -39,7 +53,8 @@ const CostEfficiency = () => {
 						className='font-noto font-bold'>(1+2+...+N)</span> for <span
 						className='text-primary-l1 font-noto font-bold'>N = 5</span></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
-					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $5.21 <span
+					<td
+						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {(gasPrice * ETHSumOfSeries5GasFee).toString()} wei <span
 						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $15.61 <span
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
@@ -48,11 +63,13 @@ const CostEfficiency = () => {
 					<td className='font-medium border-b border-table-body-border px-9'>Sum of Series <span
 						className='font-noto font-bold'>(1+2+...+N)</span> for <span
 						className='text-primary-l1 font-noto font-bold'>N =</span> <input
-						className='bg-input-bg text-white focus:outline-0 px-5 py-1.5 text-[16px] w-16 rounded-md text-center'
+						onChange={(e) => setSumOfSeriesN(parseInt(e.target.value).toString())}
+						value={sumOfSeriesN}
+						className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-16 rounded-md text-center'
 						placeholder='0'/></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
-					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $5.21 <span
-						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
+					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {(gasPrice * ETHSumOfSeriesNGasFee).toString()} wei <span
+							className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $15.61 <span
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 				</tr>
@@ -61,7 +78,8 @@ const CostEfficiency = () => {
 						className='font-noto font-bold'>N</span>th Term of Fibonacci Sequence for <span
 						className='text-primary-l1 font-noto font-bold'>N = 5</span></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
-					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $5.21 <span
+					<td
+						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {(gasPrice * ETHFibonacci5thGasFee).toString()} wei <span
 						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $15.61 <span
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
@@ -70,11 +88,13 @@ const CostEfficiency = () => {
 					<td className='font-medium border-b border-table-body-border px-9'><span
 						className='font-noto font-bold'>N</span>th Term of Fibonacci Sequence for <span
 						className='text-primary-l1 font-noto font-bold'>N =</span> <input
-						className='bg-input-bg text-white focus:outline-0 px-5 py-1.5 text-[16px] w-16 rounded-md text-center'
+						onChange={(e) => setFibonacciNth(parseInt(e.target.value).toString())}
+						value={fibonacciNth}
+						className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-16 rounded-md text-center'
 						placeholder='0'/></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
-					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $5.21 <span
-						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
+					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {(gasPrice * ETHFibonacciNthGasFee).toString()} wei <span
+							className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $15.61 <span
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 				</tr>
@@ -88,8 +108,13 @@ const CostEfficiency = () => {
 				</tbody>
 			</table>
 
-			<span id='animated-link-cost' className='animate-link absolute bottom-0 translate-y-1/2 hover:translate-y-12 transition-all group'
-			      onClick={() => document.getElementById('real-time-data')?.scrollIntoView({behavior: "smooth",block: "start", inline: "start"})}>
+			<span id='animated-link-cost'
+			      className='animate-link absolute bottom-0 translate-y-1/2 hover:translate-y-12 transition-all group'
+			      onClick={() => document.getElementById('real-time-data')?.scrollIntoView({
+				      behavior: "smooth",
+				      block: "start",
+				      inline: "start"
+			      })}>
 				<div
 					className='cursor-pointer flex flex-col gap-4 relative w-60 h-60 group-hover:w-64 group-hover:h-64 transition-all items-center justify-center '>
 					<p

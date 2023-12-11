@@ -1,4 +1,4 @@
-export default [{
+export const gasConsumptionAbi = [{
 	"inputs": [{"internalType": "uint256", "name": "input", "type": "uint256"}],
 	"name": "bitwiseOperation",
 	"outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
