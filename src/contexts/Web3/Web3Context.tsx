@@ -6,16 +6,19 @@ import {
 	getDefaultWallets,
 	RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
-import {configureChains, createConfig, WagmiConfig} from 'wagmi';
+import {configureChains, createConfig, mainnet, WagmiConfig} from 'wagmi';
 import {goerli} from 'wagmi/chains';
 import {getCurrentChainId} from '../../constants/chains';
 import {jsonRpcProvider} from 'wagmi/providers/jsonRpc';
 
 const Web3Context = createContext({});
 
+
 const Web3Provider = ({children}: { children: ReactNode }) => {
 	const getRPCURL = useCallback((chainID: number) => {
 		switch (chainID) {
+			case 1:
+				return 'https://ethereum.publicnode.com';
 			case 5:
 				return 'https://ethereum-goerli.publicnode.com';
 			default:
@@ -24,11 +27,7 @@ const Web3Provider = ({children}: { children: ReactNode }) => {
 	}, []);
 
 	const {chains, publicClient} = configureChains(
-		[
-			getCurrentChainId() === 5
-				? goerli
-				: goerli
-		],
+		[mainnet, goerli],
 		[
 			jsonRpcProvider({
 				rpc: (chain) => ({

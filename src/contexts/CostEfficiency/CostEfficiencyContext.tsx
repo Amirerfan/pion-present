@@ -7,6 +7,9 @@ import {getCurrentChainId} from "../../constants/chains.ts";
 import {goerli} from "wagmi/chains";
 import * as solanaWeb3 from "@solana/web3.js";
 import {Buffer} from 'buffer';
+import {useContractReads} from "wagmi";
+import {ethUsdAbi} from "../../abis/ETH_USD.ts";
+import {solUsdAbi} from "../../abis/SOL_USD.ts";
 
 const CostEfficiencyContext = createContext<{
 	gasPrice: bigint;
@@ -22,6 +25,8 @@ const CostEfficiencyContext = createContext<{
 	solanaSumOfSeriesNGasFee: bigint;
 	solanaFibonacci5thGasFee: bigint;
 	solanaFibonacciNthGasFee: bigint;
+	ethUsdPrice: null | bigint;
+	solUsdPrice: null | bigint;
 }>({
 	gasPrice: BigInt(0),
 	setSumOfSeriesN: () => {
@@ -38,6 +43,8 @@ const CostEfficiencyContext = createContext<{
 	solanaSumOfSeriesNGasFee: BigInt(0),
 	solanaFibonacci5thGasFee: BigInt(0),
 	solanaFibonacciNthGasFee: BigInt(0),
+	ethUsdPrice: null,
+	solUsdPrice: null,
 });
 
 const publicClient = createPublicClient({
@@ -75,28 +82,26 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 	const instruction = new solanaWeb3.TransactionInstruction({
 		keys: [],
 		programId: programId,
-		data: encodedArgument 
+		data: encodedArgument
 	});
 
 	const estimateSolana = useCallback(async () => {
-		
 		const transaction = new solanaWeb3.Transaction().add(instruction);
-		
+
 		const { blockhash } = await connection.getLatestBlockhash();
 		transaction.recentBlockhash = blockhash;
 
 		const feeCalculator = await connection.getFeeCalculatorForBlockhash(blockhash);
-		console.log(transaction)
 		const fee = feeCalculator.value!.lamportsPerSignature * transaction.signatures.length;
-	
-		console.log('Estimated fee (in lamports):', fee);
+		if (!fee) return;
+		console.log('Fee: ' + fee);
 	}, [connection, instruction]);
-	
-	
+
+
 	useEffect(() => {
 		estimateSolana();
 	}, [estimateSolana]);
-	
+
 
 	useEffect(() => {
 		publicClient.getGasPrice().then((gasPrice) => {
@@ -142,6 +147,40 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 		})
 	}, [getGasFee]);
 
+
+	const [ethUsdPrice, setEthUsdPrice] = useState<null | bigint>(null);
+	const [solUsdPrice, setSolUsdPrice] = useState<null | bigint>(null);
+
+	const { data } = useContractReads({
+		contracts: [
+			{
+				address: '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419',
+				abi: ethUsdAbi,
+				functionName: 'latestAnswer',
+				chainId: 1,
+			},
+			{
+				address: '0x4ffc43a60e009b551865a93d232e33fce9f01507',
+				abi: solUsdAbi,
+				functionName: 'latestAnswer',
+				chainId: 1,
+			}
+		],
+		watch: true,
+	})
+
+	useEffect(() => {
+		if (data && data.length > 0) {
+			if (data[0].status === 'success') {
+				setEthUsdPrice(data[0].result)
+			}
+			if (data[1].status === 'success') {
+				setSolUsdPrice(data[1].result)
+			}
+		}
+	}, [data]);
+
+
 	return (
 		<CostEfficiencyContext.Provider
 			value={{
@@ -158,6 +197,8 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 				solanaSumOfSeriesNGasFee,
 				solanaFibonacci5thGasFee,
 				solanaFibonacciNthGasFee,
+				ethUsdPrice,
+				solUsdPrice,
 			}}
 		>
 			{children}

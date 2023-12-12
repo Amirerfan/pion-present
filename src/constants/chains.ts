@@ -1,9 +1,11 @@
 export enum SupportedChainId {
 	GOERLI = 5,
+	MAINNET = 1,
 }
 
 export const CHAIN_IDS_TO_NAMES = {
 	[SupportedChainId.GOERLI]: 'goerli',
+	[SupportedChainId.MAINNET]: 'mainnet',
 };
 
 export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = Object.values(

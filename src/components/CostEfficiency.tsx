@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import useCostEfficiency from "../contexts/CostEfficiency/useCostEfficiency.ts";
+import {formatEther} from "ethers";
 
 const CostEfficiency = () => {
 
@@ -24,6 +25,7 @@ const CostEfficiency = () => {
 		sumOfSeriesN,
 		setFibonacciNth,
 		setSumOfSeriesN,
+		ethUsdPrice,
 	} = useCostEfficiency();
 
 	return (
@@ -54,8 +56,9 @@ const CostEfficiency = () => {
 						className='text-primary-l1 font-noto font-bold'>N = 5</span></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
 					<td
-						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {(gasPrice * ETHSumOfSeries5GasFee).toString()} wei <span
-						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
+						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ethUsdPrice ? "$" + Number(formatEther(ethUsdPrice * gasPrice * ETHSumOfSeries5GasFee)).toFixed(3) : (gasPrice * ETHSumOfSeries5GasFee).toString() + 'wei'}
+						<span
+							className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $15.61 <span
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 				</tr>
@@ -68,7 +71,9 @@ const CostEfficiency = () => {
 						className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-16 rounded-md text-center'
 						placeholder='0'/></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
-					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {(gasPrice * ETHSumOfSeriesNGasFee).toString()} wei <span
+					<td
+						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ethUsdPrice ? "$" + Number(formatEther(ethUsdPrice * gasPrice * ETHSumOfSeriesNGasFee)).toFixed(3) : (gasPrice * ETHSumOfSeriesNGasFee).toString() + 'wei'}
+						<span
 							className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $15.61 <span
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
@@ -79,8 +84,9 @@ const CostEfficiency = () => {
 						className='text-primary-l1 font-noto font-bold'>N = 5</span></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
 					<td
-						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {(gasPrice * ETHFibonacci5thGasFee).toString()} wei <span
-						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
+						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ethUsdPrice ? "$" + Number(formatEther(ethUsdPrice * gasPrice * ETHFibonacci5thGasFee)).toFixed(3) : (gasPrice * ETHFibonacci5thGasFee).toString() + 'wei'}
+						<span
+							className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $15.61 <span
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 				</tr>
@@ -93,7 +99,9 @@ const CostEfficiency = () => {
 						className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-16 rounded-md text-center'
 						placeholder='0'/></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
-					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {(gasPrice * ETHFibonacciNthGasFee).toString()} wei <span
+					<td
+						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ethUsdPrice ? "$" + Number(formatEther(ethUsdPrice * gasPrice * ETHFibonacciNthGasFee)).toFixed(3) : (gasPrice * ETHFibonacciNthGasFee).toString() + 'wei'}
+						<span
 							className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $15.61 <span
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
