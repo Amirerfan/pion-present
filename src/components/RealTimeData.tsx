@@ -115,16 +115,16 @@ const RealTimeData = () => {
 						<div className='card__body bg-element-body px-7 py-4 pb-8 flex-1 flex flex-col justify-between'>
 							<div className='flex flex-col gap-4'>
 								{showFirstLine &&
-                    <p className='transition-all flex gap-1 font-medium text-gray-l1'><img
+                    <p className='transition-all fade-in-animation flex gap-1 font-medium text-gray-l1'><img
                         src='/assets/images/home/right-arrow.svg' alt=''/>Retrieving
                         data ...
                     </p>}
 								{showSecondLine &&
-                    <p className='transition-all flex gap-1 font-medium text-gray-l1'><img
+                    <p className='transition-all fade-in-animation flex gap-1 font-medium text-gray-l1'><img
                         src='/assets/images/home/right-arrow.svg' alt=''/>12/32
                         Block Confirmation</p>}
 								{showThirdLine &&
-                    <p className='transition-all flex gap-1 font-medium text-gray-l1'><img
+                    <p className='transition-all fade-in-animation flex gap-1 font-medium text-gray-l1'><img
                         src='/assets/images/home/right-arrow.svg'
                         alt=''/>Status: <span
                         className='text-green'>Success</span>
