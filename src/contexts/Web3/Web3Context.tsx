@@ -8,7 +8,6 @@ import {
 } from '@rainbow-me/rainbowkit';
 import {configureChains, createConfig, mainnet, WagmiConfig} from 'wagmi';
 import {goerli} from 'wagmi/chains';
-import {getCurrentChainId} from '../../constants/chains';
 import {jsonRpcProvider} from 'wagmi/providers/jsonRpc';
 
 const Web3Context = createContext({});

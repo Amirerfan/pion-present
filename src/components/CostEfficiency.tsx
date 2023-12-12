@@ -66,7 +66,8 @@ const CostEfficiency = () => {
 					<td className='font-medium border-b border-table-body-border px-9'>Sum of Series <span
 						className='font-noto font-bold'>(1+2+...+N)</span> for <span
 						className='text-primary-l1 font-noto font-bold'>N =</span> <input
-						onChange={(e) => setSumOfSeriesN(parseInt(e.target.value).toString())}
+						type='number'
+						onChange={(e) => setSumOfSeriesN(e.target.value)}
 						value={sumOfSeriesN}
 						className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-16 rounded-md text-center'
 						placeholder='0'/></td>
@@ -94,7 +95,8 @@ const CostEfficiency = () => {
 					<td className='font-medium border-b border-table-body-border px-9'><span
 						className='font-noto font-bold'>N</span>th Term of Fibonacci Sequence for <span
 						className='text-primary-l1 font-noto font-bold'>N =</span> <input
-						onChange={(e) => setFibonacciNth(parseInt(e.target.value).toString())}
+						type='number'
+						onChange={(e) => setFibonacciNth(e.target.value)}
 						value={fibonacciNth}
 						className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-16 rounded-md text-center'
 						placeholder='0'/></td>

@@ -72,35 +72,35 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 
 	const [gasPrice, setGasPrice] = useState(BigInt(0));
 
-
-	const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('testnet'));
-
-	const programId = new solanaWeb3.PublicKey('DBYZWu2VUr2LypbdN3dh6GKKGxRCi2cyEXGRjPByMTZf');
-	const argumentValue = 5;
-	const encodedArgument = Buffer.from([argumentValue]);
-
-	const instruction = new solanaWeb3.TransactionInstruction({
-		keys: [],
-		programId: programId,
-		data: encodedArgument
-	});
-
-	const estimateSolana = useCallback(async () => {
-		const transaction = new solanaWeb3.Transaction().add(instruction);
-
-		const { blockhash } = await connection.getLatestBlockhash();
-		transaction.recentBlockhash = blockhash;
-
-		const feeCalculator = await connection.getFeeCalculatorForBlockhash(blockhash);
-		const fee = feeCalculator.value!.lamportsPerSignature * transaction.signatures.length;
-		if (!fee) return;
-		console.log('Fee: ' + fee);
-	}, [connection, instruction]);
-
-
-	useEffect(() => {
-		estimateSolana();
-	}, [estimateSolana]);
+	//
+	// const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('testnet'));
+	//
+	// const programId = new solanaWeb3.PublicKey('DBYZWu2VUr2LypbdN3dh6GKKGxRCi2cyEXGRjPByMTZf');
+	// const argumentValue = 5;
+	// const encodedArgument = Buffer.from([argumentValue]);
+	//
+	// const instruction = new solanaWeb3.TransactionInstruction({
+	// 	keys: [],
+	// 	programId: programId,
+	// 	data: encodedArgument
+	// });
+	//
+	// const estimateSolana = useCallback(async () => {
+	// 	const transaction = new solanaWeb3.Transaction().add(instruction);
+	//
+	// 	const { blockhash } = await connection.getLatestBlockhash();
+	// 	transaction.recentBlockhash = blockhash;
+	//
+	// 	const feeCalculator = await connection.getFeeCalculatorForBlockhash(blockhash);
+	// 	const fee = feeCalculator.value!.lamportsPerSignature * transaction.signatures.length;
+	// 	if (!fee) return;
+	// 	console.log('Fee: ' + fee);
+	// }, [connection, instruction]);
+	//
+	//
+	// useEffect(() => {
+	// 	estimateSolana();
+	// }, [estimateSolana]);
 
 
 	useEffect(() => {
@@ -114,7 +114,7 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 			address: GAS_CONSUMPTION_ADDRESSES[getCurrentChainId()],
 			abi: gasConsumptionAbi,
 			functionName: functionName,
-			args: [BigInt(arg)],
+			args: [BigInt(arg ?? 0)],
 			account
 		})
 	}, [publicClient])

@@ -22,3 +22,15 @@ body {
   mask: url('../public/assets/images/home/more-about-pion-logo.svg') no-repeat center;
   -webkit-mask: url('../public/assets/images/home/more-about-pion-logo.svg') no-repeat center;
 }
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
