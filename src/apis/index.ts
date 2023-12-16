@@ -11,3 +11,13 @@ export async function getChatGPTResponseAPI(message: string) {
 	)
 	return response.data;
 }
+
+export async function getSolanaFeeAPI(functionName: string, param: string) {
+	const response = await axiosInstance.get((`/gas-usage/${functionName}/${param}/`), {
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		}
+	)
+	return response.data;
+}

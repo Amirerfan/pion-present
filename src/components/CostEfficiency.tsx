@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import useCostEfficiency from "../contexts/CostEfficiency/useCostEfficiency.ts";
 import {formatEther} from "ethers";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 const CostEfficiency = () => {
 
@@ -21,11 +22,16 @@ const CostEfficiency = () => {
 		ETHFibonacciNthGasFee,
 		ETHSumOfSeries5GasFee,
 		ETHSumOfSeriesNGasFee,
+		solanaFibonacciNthGasFee,
+		solanaFibonacci5thGasFee,
+		solanaSumOfSeries5GasFee,
+		solanaSumOfSeriesNGasFee,
 		fibonacciNth,
 		sumOfSeriesN,
 		setFibonacciNth,
 		setSumOfSeriesN,
 		ethUsdPrice,
+		solUsdPrice,
 	} = useCostEfficiency();
 
 	return (
@@ -38,13 +44,13 @@ const CostEfficiency = () => {
 						<div><span className='text-xl font-bold'>Cases</span> (cost of calculating each example)</div>
 					</th>
 					<th className='p-[30px] text-center'>
-						<img src='/assets/images/home/pion-table-logo.svg' alt=''/>
+						<img className='mx-auto' src='/assets/images/home/pion-table-logo.svg' alt=''/>
 					</th>
 					<th className='p-[30px] text-center'>
-						<img src='/assets/images/home/ethereum-table-logo.svg' alt=''/>
+						<img className='mx-auto' src='/assets/images/home/ethereum-table-logo.svg' alt=''/>
 					</th>
 					<th className='p-[30px] text-center'>
-						<img src='/assets/images/home/solana-table-logo.svg' alt=''/>
+						<img className='mx-auto' src='/assets/images/home/solana-table-logo.svg' alt=''/>
 					</th>
 				</tr>
 				</thead>
@@ -59,8 +65,10 @@ const CostEfficiency = () => {
 						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ethUsdPrice ? "$" + Number(formatEther(ethUsdPrice * gasPrice * ETHSumOfSeries5GasFee)).toFixed(3) : (gasPrice * ETHSumOfSeries5GasFee).toString() + 'wei'}
 						<span
 							className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
-					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $15.61 <span
-						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
+					<td
+						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solUsdPrice ? "$" + (Number(solUsdPrice / BigInt(LAMPORTS_PER_SOL) * solanaSumOfSeries5GasFee) / LAMPORTS_PER_SOL).toFixed(7) : solanaSumOfSeries5GasFee.toString() + 'lamports'}
+						<span
+							className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 				</tr>
 				<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 					<td className='font-medium border-b border-table-body-border px-9'>Sum of Series <span
@@ -76,8 +84,10 @@ const CostEfficiency = () => {
 						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ethUsdPrice ? "$" + Number(formatEther(ethUsdPrice * gasPrice * ETHSumOfSeriesNGasFee)).toFixed(3) : (gasPrice * ETHSumOfSeriesNGasFee).toString() + 'wei'}
 						<span
 							className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
-					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $15.61 <span
-						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
+					<td
+						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solUsdPrice ? "$" + (Number(solUsdPrice / BigInt(LAMPORTS_PER_SOL) * solanaSumOfSeriesNGasFee) / LAMPORTS_PER_SOL).toFixed(7) : solanaSumOfSeriesNGasFee.toString() + 'lamports'}
+						<span
+							className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 				</tr>
 				<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 					<td className='font-medium border-b border-table-body-border px-9'><span
@@ -88,8 +98,10 @@ const CostEfficiency = () => {
 						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ethUsdPrice ? "$" + Number(formatEther(ethUsdPrice * gasPrice * ETHFibonacci5thGasFee)).toFixed(3) : (gasPrice * ETHFibonacci5thGasFee).toString() + 'wei'}
 						<span
 							className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
-					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $15.61 <span
-						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
+					<td
+						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solUsdPrice ? "$" + (Number(solUsdPrice / BigInt(LAMPORTS_PER_SOL) * solanaFibonacci5thGasFee) / LAMPORTS_PER_SOL).toFixed(7) : solanaFibonacci5thGasFee.toString() + 'lamports'}
+						<span
+							className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 				</tr>
 				<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 					<td className='font-medium border-b border-table-body-border px-9'><span
@@ -105,8 +117,10 @@ const CostEfficiency = () => {
 						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ethUsdPrice ? "$" + Number(formatEther(ethUsdPrice * gasPrice * ETHFibonacciNthGasFee)).toFixed(3) : (gasPrice * ETHFibonacciNthGasFee).toString() + 'wei'}
 						<span
 							className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
-					<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $15.61 <span
-						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
+					<td
+						className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solUsdPrice ? "$" + (Number(solUsdPrice / BigInt(LAMPORTS_PER_SOL) * solanaFibonacciNthGasFee) / LAMPORTS_PER_SOL).toFixed(7) : solanaFibonacciNthGasFee.toString() + 'lamports'}
+						<span
+							className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 				</tr>
 
 				<tr className='text-white pl-9 pr-8'>

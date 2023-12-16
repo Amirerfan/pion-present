@@ -5,11 +5,10 @@ import {createPublicClient, http} from 'viem'
 import {GAS_CONSUMPTION_ADDRESSES} from "../../constants/addresses.ts";
 import {getCurrentChainId} from "../../constants/chains.ts";
 import {goerli} from "wagmi/chains";
-import * as solanaWeb3 from "@solana/web3.js";
-import {Buffer} from 'buffer';
 import {useContractReads} from "wagmi";
 import {ethUsdAbi} from "../../abis/ETH_USD.ts";
 import {solUsdAbi} from "../../abis/SOL_USD.ts";
+import {getSolanaFeeAPI} from "../../apis";
 
 const CostEfficiencyContext = createContext<{
 	gasPrice: bigint;
@@ -57,6 +56,8 @@ const publicClient = createPublicClient({
 const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 	const [sumOfSeriesN, setSumOfSeriesN] = useState('');
 	const [fibonacciNth, setFibonacciNth] = useState('');
+	const [sumOfSeriesNTimeout, setSumOfSeriesNTimeout] = useState<NodeJS.Timeout | null>(null);
+	const [fibonacciNthTimeout, setFibonacciNthTimeout] = useState<NodeJS.Timeout | null>(null);
 
 	const [ETHSumOfSeries5GasFee, setETHSumOfSeries5GasFee] = useState(BigInt(0));
 	const [ETHSumOfSeriesNGasFee, setETHSumOfSeriesNGasFee] = useState(BigInt(0));
@@ -72,36 +73,6 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 
 	const [gasPrice, setGasPrice] = useState(BigInt(0));
 
-	//
-	// const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('testnet'));
-	//
-	// const programId = new solanaWeb3.PublicKey('DBYZWu2VUr2LypbdN3dh6GKKGxRCi2cyEXGRjPByMTZf');
-	// const argumentValue = 5;
-	// const encodedArgument = Buffer.from([argumentValue]);
-	//
-	// const instruction = new solanaWeb3.TransactionInstruction({
-	// 	keys: [],
-	// 	programId: programId,
-	// 	data: encodedArgument
-	// });
-	//
-	// const estimateSolana = useCallback(async () => {
-	// 	const transaction = new solanaWeb3.Transaction().add(instruction);
-	//
-	// 	const { blockhash } = await connection.getLatestBlockhash();
-	// 	transaction.recentBlockhash = blockhash;
-	//
-	// 	const feeCalculator = await connection.getFeeCalculatorForBlockhash(blockhash);
-	// 	const fee = feeCalculator.value!.lamportsPerSignature * transaction.signatures.length;
-	// 	if (!fee) return;
-	// 	console.log('Fee: ' + fee);
-	// }, [connection, instruction]);
-	//
-	//
-	// useEffect(() => {
-	// 	estimateSolana();
-	// }, [estimateSolana]);
-
 
 	useEffect(() => {
 		publicClient.getGasPrice().then((gasPrice) => {
@@ -109,7 +80,7 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 		})
 	}, []);
 
-	const getGasFee = useCallback(async (functionName: "bitwiseOperation" | "fibonacci" | "nthPrime" | "sumOfNaturalNumbers", arg: string) => {
+	const getEthereumGasFee = useCallback(async (functionName: "bitwiseOperation" | "fibonacci" | "nthPrime" | "sumOfNaturalNumbers", arg: string) => {
 		return await publicClient.estimateContractGas({
 			address: GAS_CONSUMPTION_ADDRESSES[getCurrentChainId()],
 			abi: gasConsumptionAbi,
@@ -117,41 +88,78 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 			args: [BigInt(arg ?? 0)],
 			account
 		})
-	}, [publicClient])
+	}, [])
+
+	const getSolanaGasFee = useCallback(async (functionName: "bitwiseOperation" | "fib" | "nthPrime" | "sumOfNaturalNumbers", arg: string) => {
+		try {
+			const response = await getSolanaFeeAPI(functionName, arg);
+			return BigInt(response.gas);
+		} catch (e) {
+			console.log(e);
+			return BigInt(0);
+		}
+	}, [])
 
 	useEffect(() => {
-		setETHSumOfSeriesNGasFee(BigInt(0))
-		getGasFee("sumOfNaturalNumbers", sumOfSeriesN).then((gasFee) => {
-			setETHSumOfSeriesNGasFee(gasFee)
-		})
-	}, [sumOfSeriesN, getGasFee]);
+		if (fibonacciNthTimeout) {
+			clearTimeout(fibonacciNthTimeout)
+		}
+		const timer = setTimeout(() => {
+			if (fibonacciNth === '') {
+				setETHFibonacciNthGasFee(BigInt(0))
+				setSolanaFibonacciNthGasFee(BigInt(0))
+				return
+			}
+			getEthereumGasFee("fibonacci", fibonacciNth === '' ? '0' : fibonacciNth).then((gasFee) => {
+				setETHFibonacciNthGasFee(gasFee)
+			})
+			getEthereumGasFee("fibonacci", '5').then((gasFee) => {
+				setETHFibonacci5thGasFee(gasFee)
+			})
+			getSolanaGasFee("fib", fibonacciNth === '' ? '0' : fibonacciNth).then((gasFee) => {
+				setSolanaFibonacciNthGasFee(gasFee)
+			})
+			getSolanaGasFee("fib", '5').then((gasFee) => {
+				setSolanaFibonacci5thGasFee(gasFee)
+			})
+		}, 500)
+
+		setFibonacciNthTimeout(timer)
+		return () => clearTimeout(timer)
+	}, [fibonacciNth, getEthereumGasFee, getSolanaGasFee]);
 
 	useEffect(() => {
-		setETHFibonacciNthGasFee(BigInt(0))
-		getGasFee("fibonacci", fibonacciNth).then((gasFee) => {
-			setETHFibonacciNthGasFee(gasFee)
-		})
-	}, [fibonacciNth, getGasFee]);
-
-	useEffect(() => {
-		setETHSumOfSeries5GasFee(BigInt(0))
-		getGasFee("sumOfNaturalNumbers", '5').then((gasFee) => {
-			setETHSumOfSeries5GasFee(gasFee)
-		})
-	}, [getGasFee]);
-
-	useEffect(() => {
-		setETHFibonacci5thGasFee(BigInt(0))
-		getGasFee("fibonacci", '5').then((gasFee) => {
-			setETHFibonacci5thGasFee(gasFee)
-		})
-	}, [getGasFee]);
+		if (sumOfSeriesNTimeout) {
+			clearTimeout(sumOfSeriesNTimeout)
+		}
+		const timer = setTimeout(() => {
+			if (sumOfSeriesN === '') {
+				setETHSumOfSeriesNGasFee(BigInt(0))
+				setSolanaSumOfSeriesNGasFee(BigInt(0))
+				return
+			}
+			getEthereumGasFee("sumOfNaturalNumbers", sumOfSeriesN === '' ? '0' : sumOfSeriesN).then((gasFee) => {
+				setETHSumOfSeriesNGasFee(gasFee)
+			})
+			getEthereumGasFee("sumOfNaturalNumbers", '5').then((gasFee) => {
+				setETHSumOfSeries5GasFee(gasFee)
+			})
+			getSolanaGasFee("sumOfNaturalNumbers", sumOfSeriesN === '' ? '0' : sumOfSeriesN).then((gasFee) => {
+				setSolanaSumOfSeriesNGasFee(gasFee)
+			})
+			getSolanaGasFee("sumOfNaturalNumbers", '5').then((gasFee) => {
+				setSolanaSumOfSeries5GasFee(gasFee)
+			})
+		}, 500)
+		setSumOfSeriesNTimeout(timer)
+		return () => clearTimeout(timer)
+	}, [sumOfSeriesN, getSolanaGasFee, getEthereumGasFee]);
 
 
 	const [ethUsdPrice, setEthUsdPrice] = useState<null | bigint>(null);
 	const [solUsdPrice, setSolUsdPrice] = useState<null | bigint>(null);
 
-	const { data } = useContractReads({
+	const {data} = useContractReads({
 		contracts: [
 			{
 				address: '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419',
