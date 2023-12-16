@@ -6,15 +6,15 @@ import useSolanaGasCalculator from "../hooks/useSolanaGasCalculator.ts";
 const TableForFibonacci = () => {
 	const [fibonacciNth, setFibonacciNth] = useState('');
 
-	const { gas: ETHGasFor5 } = useETHGasCalculator("fibonacci", '5', fibonacciNth);
-	const { gas: ETHGasFor10 } = useETHGasCalculator("fibonacci", '10', fibonacciNth);
-	const { gas: ETHGasFor15 } = useETHGasCalculator("fibonacci", '15', fibonacciNth);
-	const { gas: ETHGasForN } = useETHGasCalculator("fibonacci", fibonacciNth);
+	const {gas: ETHGasFor5} = useETHGasCalculator("fibonacci", '5', fibonacciNth);
+	const {gas: ETHGasFor10} = useETHGasCalculator("fibonacci", '10', fibonacciNth);
+	const {gas: ETHGasFor15} = useETHGasCalculator("fibonacci", '15', fibonacciNth);
+	const {gas: ETHGasForN, error: errorForETHFibN} = useETHGasCalculator("fibonacci", fibonacciNth);
 
-	const { gas: solanaGasFor5 } = useSolanaGasCalculator("fib", '5', fibonacciNth);
-	const { gas: solanaGasFor10 } = useSolanaGasCalculator("fib", '10', fibonacciNth);
-	const { gas: solanaGasFor15 } = useSolanaGasCalculator("fib", '15', fibonacciNth);
-	const { gas: solanaGasForN } = useSolanaGasCalculator("fib", fibonacciNth);
+	const {gas: solanaGasFor5} = useSolanaGasCalculator("fib", '5', fibonacciNth);
+	const {gas: solanaGasFor10} = useSolanaGasCalculator("fib", '10', fibonacciNth);
+	const {gas: solanaGasFor15} = useSolanaGasCalculator("fib", '15', fibonacciNth);
+	const {gas: solanaGasForN, error: errorForSolanaFibN} = useSolanaGasCalculator("fib", fibonacciNth);
 
 	return (
 		<table className={`table rounded-3xl overflow-hidden mx-auto max-w-[80vw]`}>
@@ -42,11 +42,11 @@ const TableForFibonacci = () => {
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor5}
 					<span
-						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
+						className='italic text-sm text-red font-semibold'> (+62%)</span></td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasFor5}
 					<span
-						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
+						className='italic text-sm text-red font-semibold'> (+386%)</span></td>
 			</tr>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 10</td>
@@ -54,11 +54,11 @@ const TableForFibonacci = () => {
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor10}
 					<span
-						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
+						className='italic text-sm text-red font-semibold'> (+62%)</span></td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasFor10}
 					<span
-						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
+						className='italic text-sm text-red font-semibold'> (+386%)</span></td>
 			</tr>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 15</td>
@@ -66,11 +66,11 @@ const TableForFibonacci = () => {
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor15}
 					<span
-						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
+						className='italic text-sm text-red font-semibold'> (+62%)</span></td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasFor15}
 					<span
-						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
+						className='italic text-sm text-red font-semibold'> (+386%)</span></td>
 			</tr>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 				<td className='font-medium border-b border-table-body-border px-9'> <span
@@ -81,14 +81,18 @@ const TableForFibonacci = () => {
 					className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-16 rounded-md text-center'
 					placeholder='0'/></td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
+				<td className='px-9 font-semibold border-b border-table-body-border text-center'>
+					{errorForETHFibN ? <p className='text-red text-xs font-medium'>Calculation Error!</p> : '≈ ' + ETHGasForN}
+					{!errorForETHFibN && <span
+              className='italic text-sm text-red font-semibold'> (+62%)</span>}
+				</td>
 				<td
-					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasForN}
-					<span
-						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
-				<td
-					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasForN}
-					<span
-						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
+					className='px-9 font-semibold border-b border-table-body-border text-center'>
+					{errorForSolanaFibN ?
+						<p className='text-red text-xs font-medium'>Calculation Error!</p> : '≈ ' + solanaGasForN}
+					{!errorForSolanaFibN && <span
+              className='italic text-sm text-red font-semibold'> (+386%)</span>}
+				</td>
 			</tr>
 
 			<tr className='text-white pl-9 pr-8'>

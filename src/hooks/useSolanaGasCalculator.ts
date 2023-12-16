@@ -20,6 +20,8 @@ const useSolanaGasCalculator = (functionName: "bitwiseOperation" | "fib" | "nthP
 			}
 
 			try {
+				setError(false);
+
 				const response = await getSolanaFeeAPI(functionName, args);
 				if (response.error) {
 					setGas('-');

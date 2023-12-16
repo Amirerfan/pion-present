@@ -40,6 +40,7 @@ const useETHGasCalculator = (functionName: "bitwiseOperation" | "fibonacci" | "n
 				return;
 			}
 			try {
+				setError(false);
 				const response = await publicClient.estimateContractGas({
 					address: GAS_CONSUMPTION_ADDRESSES[getCurrentChainId()],
 					abi: gasConsumptionAbi,

@@ -6,15 +6,15 @@ import useSolanaGasCalculator from "../hooks/useSolanaGasCalculator.ts";
 const TableForSumOfSeries = () => {
 	const [sumOfSeriesN, setSumOfSeriesN] = useState('');
 
-	const { gas: ETHGasFor5 } = useETHGasCalculator("sumOfNaturalNumbers", '5', sumOfSeriesN);
-	const { gas: ETHGasFor10 } = useETHGasCalculator("sumOfNaturalNumbers", '10', sumOfSeriesN);
-	const { gas: ETHGasFor15 } = useETHGasCalculator("sumOfNaturalNumbers", '15', sumOfSeriesN);
-	const { gas: ETHGasForN } = useETHGasCalculator("sumOfNaturalNumbers", sumOfSeriesN);
+	const {gas: ETHGasFor5} = useETHGasCalculator("sumOfNaturalNumbers", '5', sumOfSeriesN);
+	const {gas: ETHGasFor10} = useETHGasCalculator("sumOfNaturalNumbers", '10', sumOfSeriesN);
+	const {gas: ETHGasFor15} = useETHGasCalculator("sumOfNaturalNumbers", '15', sumOfSeriesN);
+	const {gas: ETHGasForN, error: errorForETHSumN} = useETHGasCalculator("sumOfNaturalNumbers", sumOfSeriesN);
 
-	const { gas: solanaGasFor5 } = useSolanaGasCalculator("sumOfNaturalNumbers", '5', sumOfSeriesN);
-	const { gas: solanaGasFor10 } = useSolanaGasCalculator("sumOfNaturalNumbers", '10', sumOfSeriesN);
-	const { gas: solanaGasFor15 } = useSolanaGasCalculator("sumOfNaturalNumbers", '15', sumOfSeriesN);
-	const { gas: solanaGasForN } = useSolanaGasCalculator("sumOfNaturalNumbers", sumOfSeriesN);
+	const {gas: solanaGasFor5} = useSolanaGasCalculator("sumOfNaturalNumbers", '5', sumOfSeriesN);
+	const {gas: solanaGasFor10} = useSolanaGasCalculator("sumOfNaturalNumbers", '10', sumOfSeriesN);
+	const {gas: solanaGasFor15} = useSolanaGasCalculator("sumOfNaturalNumbers", '15', sumOfSeriesN);
+	const {gas: solanaGasForN, error: errorForSolanaSumN} = useSolanaGasCalculator("sumOfNaturalNumbers", sumOfSeriesN);
 
 	return (
 		<table className={`table rounded-3xl overflow-hidden mx-auto max-w-[80vw]`}>
@@ -81,14 +81,18 @@ const TableForSumOfSeries = () => {
 					className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-16 rounded-md text-center'
 					placeholder='0'/></td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
+				<td className='px-9 font-semibold border-b border-table-body-border text-center'>
+					{errorForETHSumN ? <p className='text-red text-xs font-medium'>Calculation Error!</p> : '≈ ' + ETHGasForN}
+					{!errorForETHSumN && <span
+              className='italic text-sm text-red font-semibold'> (+62%)</span>}
+				</td>
 				<td
-					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasForN}
-					<span
-						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
-				<td
-					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasForN}
-					<span
-						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
+					className='px-9 font-semibold border-b border-table-body-border text-center'>
+					{errorForSolanaSumN ?
+						<p className='text-red text-xs font-medium'>Calculation Error!</p> : '≈ ' + solanaGasForN}
+					{!errorForSolanaSumN && <span
+              className='italic text-sm text-red font-semibold'> (+386%)</span>}
+				</td>
 			</tr>
 
 			<tr className='text-white pl-9 pr-8'>
