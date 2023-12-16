@@ -53,3 +53,11 @@ input[type=number] {
     opacity: 1;
   }
 }
+
+.bottom-5 {
+  @apply translate-y-[50px];
+
+  & {
+
+  }
+}
