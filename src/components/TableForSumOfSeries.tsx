@@ -1,25 +1,25 @@
 import useCostEfficiency from "../contexts/CostEfficiency/useCostEfficiency.ts";
 import {LAMPORTS_PER_SOL} from "@solana/web3.js";
-import {formatEther} from "ethers";
+import {useState} from "react";
+import useETHGasCalculator from "../hooks/useETHGasCalculator.ts";
 
 
 const TableForSumOfSeries = () => {
 
 	const {
-		gasPrice,
-		ETHFibonacci5thGasFee,
-		ETHFibonacciNthGasFee,
-		ETHSumOfSeries5GasFee,
-		ETHSumOfSeriesNGasFee,
 		solanaFibonacciNthGasFee,
 		solanaFibonacci5thGasFee,
 		solanaSumOfSeries5GasFee,
 		solanaSumOfSeriesNGasFee,
-		fibonacciNth,
-		setFibonacciNth,
-		ethUsdPrice,
 		solUsdPrice,
 	} = useCostEfficiency();
+
+	const [sumOfSeriesN, setSumOfSeriesN] = useState('');
+
+	const { gas: ETHGasFor5 } = useETHGasCalculator("sumOfNaturalNumbers", '5', sumOfSeriesN);
+	const { gas: ETHGasFor10 } = useETHGasCalculator("sumOfNaturalNumbers", '10', sumOfSeriesN);
+	const { gas: ETHGasFor15 } = useETHGasCalculator("sumOfNaturalNumbers", '15', sumOfSeriesN);
+	const { gas: ETHGasForN } = useETHGasCalculator("sumOfNaturalNumbers", sumOfSeriesN);
 
 	return (
 		<table className={`table rounded-3xl overflow-hidden mx-auto max-w-[80vw]`}>
@@ -45,7 +45,7 @@ const TableForSumOfSeries = () => {
 				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 5</td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
 				<td
-					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ethUsdPrice ? "$" + Number(formatEther(ethUsdPrice * gasPrice * ETHSumOfSeries5GasFee)).toFixed(3) : (gasPrice * ETHSumOfSeries5GasFee).toString() + 'wei'}
+					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor5}
 					<span
 						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 				<td
@@ -54,10 +54,10 @@ const TableForSumOfSeries = () => {
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 			</tr>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
-				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 5</td>
+				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 10</td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
 				<td
-					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ethUsdPrice ? "$" + Number(formatEther(ethUsdPrice * gasPrice * ETHSumOfSeriesNGasFee)).toFixed(3) : (gasPrice * ETHSumOfSeriesNGasFee).toString() + 'wei'}
+					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor10}
 					<span
 						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 				<td
@@ -66,10 +66,10 @@ const TableForSumOfSeries = () => {
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 			</tr>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
-				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 5</td>
+				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 15</td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
 				<td
-					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ethUsdPrice ? "$" + Number(formatEther(ethUsdPrice * gasPrice * ETHFibonacci5thGasFee)).toFixed(3) : (gasPrice * ETHFibonacci5thGasFee).toString() + 'wei'}
+					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor15}
 					<span
 						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 				<td
@@ -81,13 +81,13 @@ const TableForSumOfSeries = () => {
 				<td className='font-medium border-b border-table-body-border px-9'> <span
 					className='text-primary-l1 font-noto font-bold'>N =</span> <input
 					type='number'
-					onChange={(e) => setFibonacciNth(e.target.value)}
-					value={fibonacciNth}
+					onChange={(e) => setSumOfSeriesN(e.target.value)}
+					value={sumOfSeriesN}
 					className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-16 rounded-md text-center'
 					placeholder='0'/></td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
 				<td
-					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ethUsdPrice ? "$" + Number(formatEther(ethUsdPrice * gasPrice * ETHFibonacciNthGasFee)).toFixed(3) : (gasPrice * ETHFibonacciNthGasFee).toString() + 'wei'}
+					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasForN}
 					<span
 						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 				<td
