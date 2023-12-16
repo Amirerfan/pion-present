@@ -4,7 +4,7 @@ const Hero = () => {
 	const windowHeight = useMemo(() => window.innerHeight, []);
 	const [offset, setOffset] = useState(0);
 
-	const onScroll = useCallback((event: any) => {
+	const onScroll = useCallback(() => {
 		setOffset(Math.round(document.getElementById('page')?.scrollTop || 0));
 
 		const animateLinkHero = document.getElementById('animate-link-hero');

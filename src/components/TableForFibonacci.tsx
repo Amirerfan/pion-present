@@ -16,9 +16,7 @@ const TableForFibonacci = () => {
 		solanaSumOfSeries5GasFee,
 		solanaSumOfSeriesNGasFee,
 		fibonacciNth,
-		sumOfSeriesN,
 		setFibonacciNth,
-		setSumOfSeriesN,
 		ethUsdPrice,
 		solUsdPrice,
 	} = useCostEfficiency();
