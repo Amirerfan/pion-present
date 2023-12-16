@@ -16,6 +16,12 @@ const TableForSumOfSeries = () => {
 	const {gas: solanaGasFor15} = useSolanaGasCalculator("sumOfNaturalNumbers", '15', sumOfSeriesN);
 	const {gas: solanaGasForN, error: errorForSolanaSumN} = useSolanaGasCalculator("sumOfNaturalNumbers", sumOfSeriesN);
 
+
+	const selectInput = (input: HTMLInputElement) => {
+		input.select();
+		input.setSelectionRange(0, 9999999999);
+	}
+
 	return (
 		<table className={`table rounded-3xl overflow-hidden mx-auto max-w-[80vw]`}>
 			<thead className='bg-element-header'>
@@ -77,8 +83,9 @@ const TableForSumOfSeries = () => {
 					className='text-primary-l1 font-noto font-bold'>N =</span> <input
 					type='number'
 					onChange={(e) => setSumOfSeriesN(e.target.value)}
+					onClick={(e) => selectInput(e.target as HTMLInputElement)}
 					value={sumOfSeriesN}
-					className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-16 rounded-md text-center'
+					className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-32 rounded-md text-center'
 					placeholder='0'/></td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>

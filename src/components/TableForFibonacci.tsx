@@ -16,6 +16,11 @@ const TableForFibonacci = () => {
 	const {gas: solanaGasFor15} = useSolanaGasCalculator("fib", '15', fibonacciNth);
 	const {gas: solanaGasForN, error: errorForSolanaFibN} = useSolanaGasCalculator("fib", fibonacciNth);
 
+	const selectInput = (input: HTMLInputElement) => {
+		input.select();
+		input.setSelectionRange(0, 99999999999);
+	}
+
 	return (
 		<table className={`table rounded-3xl overflow-hidden mx-auto max-w-[80vw]`}>
 			<thead className='bg-element-header'>
@@ -78,7 +83,8 @@ const TableForFibonacci = () => {
 					type='number'
 					onChange={(e) => setFibonacciNth(e.target.value)}
 					value={fibonacciNth}
-					className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-16 rounded-md text-center'
+					onClick={(e) => selectInput(e.target as HTMLInputElement)}
+					className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-32 rounded-md text-center'
 					placeholder='0'/></td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>
