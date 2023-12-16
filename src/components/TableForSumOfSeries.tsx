@@ -1,25 +1,20 @@
-import useCostEfficiency from "../contexts/CostEfficiency/useCostEfficiency.ts";
-import {LAMPORTS_PER_SOL} from "@solana/web3.js";
 import {useState} from "react";
 import useETHGasCalculator from "../hooks/useETHGasCalculator.ts";
+import useSolanaGasCalculator from "../hooks/useSolanaGasCalculator.ts";
 
 
 const TableForSumOfSeries = () => {
-
-	const {
-		solanaFibonacciNthGasFee,
-		solanaFibonacci5thGasFee,
-		solanaSumOfSeries5GasFee,
-		solanaSumOfSeriesNGasFee,
-		solUsdPrice,
-	} = useCostEfficiency();
-
 	const [sumOfSeriesN, setSumOfSeriesN] = useState('');
 
 	const { gas: ETHGasFor5 } = useETHGasCalculator("sumOfNaturalNumbers", '5', sumOfSeriesN);
 	const { gas: ETHGasFor10 } = useETHGasCalculator("sumOfNaturalNumbers", '10', sumOfSeriesN);
 	const { gas: ETHGasFor15 } = useETHGasCalculator("sumOfNaturalNumbers", '15', sumOfSeriesN);
 	const { gas: ETHGasForN } = useETHGasCalculator("sumOfNaturalNumbers", sumOfSeriesN);
+
+	const { gas: solanaGasFor5 } = useSolanaGasCalculator("sumOfNaturalNumbers", '5', sumOfSeriesN);
+	const { gas: solanaGasFor10 } = useSolanaGasCalculator("sumOfNaturalNumbers", '10', sumOfSeriesN);
+	const { gas: solanaGasFor15 } = useSolanaGasCalculator("sumOfNaturalNumbers", '15', sumOfSeriesN);
+	const { gas: solanaGasForN } = useSolanaGasCalculator("sumOfNaturalNumbers", sumOfSeriesN);
 
 	return (
 		<table className={`table rounded-3xl overflow-hidden mx-auto max-w-[80vw]`}>
@@ -49,7 +44,7 @@ const TableForSumOfSeries = () => {
 					<span
 						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 				<td
-					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solUsdPrice ? "$" + (Number(solUsdPrice / BigInt(LAMPORTS_PER_SOL) * solanaSumOfSeries5GasFee) / LAMPORTS_PER_SOL).toFixed(7) : solanaSumOfSeries5GasFee.toString() + 'lamports'}
+					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasFor5}
 					<span
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 			</tr>
@@ -61,7 +56,7 @@ const TableForSumOfSeries = () => {
 					<span
 						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 				<td
-					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solUsdPrice ? "$" + (Number(solUsdPrice / BigInt(LAMPORTS_PER_SOL) * solanaSumOfSeriesNGasFee) / LAMPORTS_PER_SOL).toFixed(7) : solanaSumOfSeriesNGasFee.toString() + 'lamports'}
+					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasFor10}
 					<span
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 			</tr>
@@ -73,7 +68,7 @@ const TableForSumOfSeries = () => {
 					<span
 						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 				<td
-					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solUsdPrice ? "$" + (Number(solUsdPrice / BigInt(LAMPORTS_PER_SOL) * solanaFibonacci5thGasFee) / LAMPORTS_PER_SOL).toFixed(7) : solanaFibonacci5thGasFee.toString() + 'lamports'}
+					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasFor15}
 					<span
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 			</tr>
@@ -91,7 +86,7 @@ const TableForSumOfSeries = () => {
 					<span
 						className='italic text-[16px] text-red font-bold'>(+62%)</span></td>
 				<td
-					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solUsdPrice ? "$" + (Number(solUsdPrice / BigInt(LAMPORTS_PER_SOL) * solanaFibonacciNthGasFee) / LAMPORTS_PER_SOL).toFixed(7) : solanaFibonacciNthGasFee.toString() + 'lamports'}
+					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasForN}
 					<span
 						className='italic text-[16px] text-red font-bold'>(+386%)</span></td>
 			</tr>
