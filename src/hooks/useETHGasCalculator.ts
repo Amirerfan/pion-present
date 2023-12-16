@@ -17,12 +17,13 @@ const publicClient = createPublicClient({
 
 const useETHGasCalculator = (functionName: "bitwiseOperation" | "fibonacci" | "nthPrime" | "sumOfNaturalNumbers", args: string, refresh?: string) => {
 	const {ethUsdPrice} = useCostEfficiency();
-	
+	const [ETHGasCalculatorTimeout, setETHGasCalculatorTimeout] = useState<NodeJS.Timeout | null>(null);
 	const [gasPrice, setGasPrice] = useState(BigInt(0));
 	const account = '0xf39fd6e51aad88f6f4ce6ab8827279cff2b92266';
+	const [error, setError] = useState(false);
 
 	const [gas, setGas] = useState('0.0');
-	
+
 	useEffect(() => {
 		publicClient.getGasPrice().then((gasPrice) => {
 			setGasPrice(gasPrice)
@@ -30,25 +31,44 @@ const useETHGasCalculator = (functionName: "bitwiseOperation" | "fibonacci" | "n
 	}, []);
 
 	const ETHGasCalculator = useCallback(async () => {
-		if (args === '') {
-			setGas('$0.00');
-			return;
+		if (ETHGasCalculatorTimeout) {
+			clearTimeout(ETHGasCalculatorTimeout);
 		}
-		const response = await publicClient.estimateContractGas({
-			address: GAS_CONSUMPTION_ADDRESSES[getCurrentChainId()],
-			abi: gasConsumptionAbi,
-			functionName: functionName,
-			args: [BigInt(args === '' ? 0 : args)],
-			account
-		})
-		setGas(ethUsdPrice ? '$' + Number(formatEther(ethUsdPrice * gasPrice * response)).toFixed(2) : (gasPrice * response).toString() + 'wei');
+		setETHGasCalculatorTimeout(setTimeout(async () => {
+			if (args === '') {
+				setGas('$0.00');
+				return;
+			}
+			try {
+				const response = await publicClient.estimateContractGas({
+					address: GAS_CONSUMPTION_ADDRESSES[getCurrentChainId()],
+					abi: gasConsumptionAbi,
+					functionName: functionName,
+					args: [BigInt(args === '' ? 0 : args)],
+					account
+				})
+				setError(false);
+				setGas(ethUsdPrice ? '$' + Number(formatEther(ethUsdPrice * gasPrice * response)).toFixed(2) : (gasPrice * response).toString() + 'wei');
+			} catch (e) {
+				console.log(e);
+				setGas('-');
+				setError(true);
+			}
+		}, 500));
+
+		return () => {
+			if (ETHGasCalculatorTimeout) {
+				clearTimeout(ETHGasCalculatorTimeout);
+			}
+		}
 	}, [args, ethUsdPrice, functionName, gasPrice, refresh])
 
 	useEffect(() => {
 		ETHGasCalculator();
 	}, [ETHGasCalculator]);
-	
-	return {gas}
+
+
+	return {gas, error}
 }
 
 export default useETHGasCalculator;

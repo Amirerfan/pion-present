@@ -7,7 +7,6 @@ import TableForSumOfSeries from "./TableForSumOfSeries.tsx";
 import TableForFibonacci from "./TableForFibonacci.tsx";
 
 const CostEfficiency = () => {
-
 	const [hoverState, setHoverState] = useState(false);
 
 	useEffect(() => {
