@@ -45,7 +45,7 @@ const useETHGasCalculator = (functionName: "bitwiseOperation" | "fibonacci" | "n
 					address: GAS_CONSUMPTION_ADDRESSES[getCurrentChainId()],
 					abi: gasConsumptionAbi,
 					functionName: functionName,
-					args: [BigInt(args === '' ? 0 : args)],
+					args: args === '' ? [BigInt('0')] : [BigInt(args)],
 					account
 				})
 				setError(false);
