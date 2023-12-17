@@ -13,7 +13,7 @@ export async function getChatGPTResponseAPI(message: string) {
 }
 
 export async function getSolanaFeeAPI(functionName: string, param: string) {
-	const response = await axiosInstance.get((`/gas-usage/${functionName}/${param}/`), {
+	const response = await axiosInstance.get((`https://solana-api.muon.net/api/gas-usage/${functionName}/${param}/`), {
 			headers: {
 				'Content-Type': 'application/json',
 			}
