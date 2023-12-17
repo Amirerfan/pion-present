@@ -4,7 +4,16 @@ import useRealTimeData from "../contexts/RealTimeData/useRealTimeData.ts";
 import {toast} from 'react-toastify';
 
 const RealTimeData = () => {
-	const {message, setMessage, getChatGPTResponse, loading, response, error} = useRealTimeData();
+	const {
+		message,
+		setMessage,
+		getChatGPTResponse,
+		loading,
+		response,
+		error,
+		setHoverState,
+		hoverState
+	} = useRealTimeData();
 
 	const [result, setResult] = useState<boolean | null>(null);
 	const [showFirstLine, setShowFirstLine] = useState(false);
@@ -47,9 +56,6 @@ const RealTimeData = () => {
 		}
 	}, [error]);
 
-
-	const [hoverState, setHoverState] = useState(false);
-
 	useEffect(() => {
 		document.getElementById('animated-link-real-time')?.addEventListener('mouseenter', () => {
 			setHoverState(true);
@@ -84,7 +90,7 @@ const RealTimeData = () => {
 	return (
 		<div id='real-time-data'
 		     className='real-time-data flex flex-col w-full h-full items-center justify-center relative'>
-			<section className={`real-time-data-body flex flex-col gap-6 transition-all ${hoverState && '-translate-y-11'}`}>
+			<section className={`real-time-data-body flex flex-col gap-4 transition-all ${hoverState && '-translate-y-16'}`}>
 				<p className='text-white text-xl font-bold text-left'>PION enables you to get Real-time data in a secure and
 					decentralized way. </p>
 				<div className='flex gap-8 w-[928px]'>
@@ -122,7 +128,7 @@ const RealTimeData = () => {
 								{showSecondLine &&
                     <p className='transition-all fade-in-animation flex gap-1 font-medium text-gray-l1'><img
                         src='/assets/images/home/right-arrow.svg' alt=''/>12/32
-                        Block Confirmation</p>}
+                        Signature confirmation</p>}
 								{showThirdLine &&
                     <p className='transition-all fade-in-animation flex gap-1 font-medium text-gray-l1'><img
                         src='/assets/images/home/right-arrow.svg'

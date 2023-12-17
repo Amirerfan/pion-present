@@ -1,8 +1,10 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
+import useCostEfficiency from "../contexts/CostEfficiency/useCostEfficiency.ts";
 
 const Hero = () => {
 	const windowHeight = useMemo(() => window.innerHeight, []);
 	const [offset, setOffset] = useState(0);
+	const {hoverState} = useCostEfficiency();
 
 	const onScroll = useCallback(() => {
 		setOffset(Math.round(document.getElementById('page')?.scrollTop || 0));
@@ -11,7 +13,7 @@ const Hero = () => {
 
 		if (animateLinkHero) {
 			const translate = offset > windowHeight ? 60 : (offset / windowHeight) * 60;
-			animateLinkHero.style.transform = `translateY(${translate}%)`;
+			animateLinkHero.style.transform = `translateY(${translate}%) `;
 		}
 
 		if (offset > windowHeight / 2) {
@@ -48,7 +50,7 @@ const Hero = () => {
 				</div>
 			</div>
 
-			<span id='animate-link-hero' className='animate-link absolute bottom-4 group'
+			<span id='animate-link-hero' className={`animate-link absolute bottom-4 group ${hoverState && ' transition-all !translate-y-16'}`}
 			      onClick={() => document.getElementById('cost-efficiency')?.scrollIntoView({
 				      behavior: "smooth",
 				      block: "start",

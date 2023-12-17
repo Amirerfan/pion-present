@@ -23,7 +23,7 @@ const TableForSumOfSeries = () => {
 	}
 
 	return (
-		<table className={`table rounded-3xl overflow-hidden mx-auto max-w-[80vw]`}>
+		<table className={`table rounded-3xl overflow-hidden w-[80%] min-w-[80%] max-w-[80%] mx-auto`}>
 			<thead className='bg-element-header'>
 			<tr>
 				<th className='text-white font-semibold px-9 py-[30px] text-left min-w-[25vw]'>

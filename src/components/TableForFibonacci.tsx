@@ -22,7 +22,7 @@ const TableForFibonacci = () => {
 	}
 
 	return (
-		<table className={`table rounded-3xl overflow-hidden mx-auto max-w-[80vw]`}>
+		<table className={`table rounded-3xl overflow-hidden mx-auto w-[80%] min-w-[80%] max-w-[80%]`}>
 			<thead className='bg-element-header'>
 			<tr>
 				<th className='text-white font-semibold px-9 py-[30px] min-w-[25vw] text-left'>

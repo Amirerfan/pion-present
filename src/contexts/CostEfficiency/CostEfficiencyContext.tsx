@@ -7,14 +7,20 @@ import {solUsdAbi} from "../../abis/SOL_USD.ts";
 const CostEfficiencyContext = createContext<{
 	ethUsdPrice: null | bigint;
 	solUsdPrice: null | bigint;
+	hoverState: boolean;
+	setHoverState: (hoverState: boolean) => void;
 }>({
 	ethUsdPrice: null,
 	solUsdPrice: null,
+	hoverState: false,
+	setHoverState: () => {},
 });
 
 const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 	const [ethUsdPrice, setEthUsdPrice] = useState<null | bigint>(null);
 	const [solUsdPrice, setSolUsdPrice] = useState<null | bigint>(null);
+	const [hoverState, setHoverState] = useState(false);
+
 
 	const {data} = useContractReads({
 		contracts: [
@@ -51,6 +57,8 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 			value={{
 				ethUsdPrice,
 				solUsdPrice,
+				hoverState,
+				setHoverState
 			}}
 		>
 			{children}

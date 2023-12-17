@@ -1,13 +1,16 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 
 'use client';
 
 import {Carousel} from 'flowbite-react';
 import TableForSumOfSeries from "./TableForSumOfSeries.tsx";
 import TableForFibonacci from "./TableForFibonacci.tsx";
+import useRealTimeData from "../contexts/RealTimeData/useRealTimeData.ts";
+import useCostEfficiency from "../contexts/CostEfficiency/useCostEfficiency.ts";
 
 const CostEfficiency = () => {
-	const [hoverState, setHoverState] = useState(false);
+	const { hoverState: hoverStateForRealTimeData } = useRealTimeData();
+	const { hoverState, setHoverState } = useCostEfficiency();
 
 	useEffect(() => {
 		document.getElementById('animated-link-cost')?.addEventListener('mouseenter', () => {
@@ -16,21 +19,26 @@ const CostEfficiency = () => {
 		document.getElementById('animated-link-cost')?.addEventListener('mouseleave', () => {
 			setHoverState(false);
 		});
-	}, []);
+	}, [setHoverState]);
 
 	return (
 		<div id='cost-efficiency'
-		     className='cost-efficiency flex flex-col w-full h-full items-center relative justify-center'>
+		     className='cost-efficiency flex flex-col w-full gap-2 h-full items-center relative justify-center'>
 
-			<div className={`h-auto max-w-[90vw] transition-all ${hoverState && '-translate-y-12'}`}>
+			<div className={`max-w-[90vw] w-full transition-all ${hoverState && '-translate-y-16'}`}>
+			<p className='text-white w-[80%] mx-auto text-xl font-bold text-left'>PION enables you to get Real-time data in a secure and
+				decentralized way. </p>
+			</div>
+
+			<div className={`h-auto max-w-[90vw] transition-all ${hoverState && '-translate-y-16'}`}>
 				<Carousel slide={false}>
-					<TableForSumOfSeries />
-					<TableForFibonacci />
+					<TableForSumOfSeries/>
+					<TableForFibonacci/>
 				</Carousel>
 			</div>
 
 			<span id='animated-link-cost'
-			      className='animate-link absolute bottom-0 translate-y-1/2 hover:translate-y-12 transition-all group'
+			      className={`animate-link absolute bottom-0 translate-y-1/2 hover:translate-y-12 transition-all group ${hoverStateForRealTimeData && 'translate-y-12'}`}
 			      onClick={() => document.getElementById('real-time-data')?.scrollIntoView({
 				      behavior: "smooth",
 				      block: "start",

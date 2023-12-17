@@ -8,6 +8,8 @@ const RealTimeDataContext = createContext<{
 	getChatGPTResponse: () => void;
 	response: boolean | null;
 	error: boolean;
+	hoverState: boolean;
+	setHoverState: (hoverState: boolean) => void;
 }>({
 	message: '',
 	loading: false,
@@ -15,6 +17,8 @@ const RealTimeDataContext = createContext<{
 	getChatGPTResponse: () => {},
 	response: null,
 	error: false,
+	hoverState: false,
+	setHoverState: () => {},
 });
 
 const RealTimeDataProvider = ({children}: { children: ReactNode }) => {
@@ -22,6 +26,8 @@ const RealTimeDataProvider = ({children}: { children: ReactNode }) => {
 	const [response, setResponse] = useState<null | boolean>(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
+
+	const [hoverState, setHoverState] = useState(false);
 
 	const getChatGPTResponse = useCallback(async () => {
 		setLoading(true);
@@ -52,6 +58,8 @@ const RealTimeDataProvider = ({children}: { children: ReactNode }) => {
 				getChatGPTResponse,
 				response,
 				error,
+				hoverState,
+				setHoverState,
 			}}
 		>
 			{children}
