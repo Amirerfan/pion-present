@@ -22,6 +22,9 @@ const useETHGasCalculator = (functionName: "bitwiseOperation" | "fibonacci" | "n
 	const account = '0xf39fd6e51aad88f6f4ce6ab8827279cff2b92266';
 	const [error, setError] = useState(false);
 
+	const [costInUSD, setCostInUSD] = useState(0);
+	const [costInETH, setCostInETH] = useState(0);
+
 	const [gas, setGas] = useState('0.0');
 
 	useEffect(() => {
@@ -37,6 +40,8 @@ const useETHGasCalculator = (functionName: "bitwiseOperation" | "fibonacci" | "n
 		setETHGasCalculatorTimeout(setTimeout(async () => {
 			if (args === '') {
 				setGas('$0.00');
+				setCostInUSD(0);
+				setCostInETH(0);
 				return;
 			}
 			try {
@@ -49,7 +54,10 @@ const useETHGasCalculator = (functionName: "bitwiseOperation" | "fibonacci" | "n
 					account
 				})
 				setError(false);
-				setGas(ethUsdPrice ? '$' + Number(formatEther(ethUsdPrice * gasPrice * response)).toFixed(2) : (gasPrice * response).toString() + 'wei');
+				if (ethUsdPrice) setCostInUSD(Number(formatEther(ethUsdPrice * gasPrice * response)));
+				else setCostInETH(Number(formatEther(gasPrice * response)));
+
+				setGas(ethUsdPrice ? '$' + Number(formatEther(ethUsdPrice * gasPrice * response)).toFixed(2) : formatEther(gasPrice * response) + ' ETH');
 			} catch (e) {
 				console.log(e);
 				setGas('-');
@@ -69,7 +77,7 @@ const useETHGasCalculator = (functionName: "bitwiseOperation" | "fibonacci" | "n
 	}, [ETHGasCalculator]);
 
 
-	return {gas, error}
+	return {gas, error, costInUSD, costInETH};
 }
 
 export default useETHGasCalculator;

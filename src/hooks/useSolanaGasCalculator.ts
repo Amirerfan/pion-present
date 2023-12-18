@@ -9,6 +9,9 @@ const useSolanaGasCalculator = (functionName: "bitwiseOperation" | "fib" | "nthP
 	const [gas, setGas] = useState('0.0');
 	const [error, setError] = useState(false);
 
+	const [costInUSD, setCostInUSD] = useState(0);
+	const [costInLamports, setCostInLamports] = useState(0);
+
 	const SolanaGasCalculator = useCallback(() => {
 		if (solanaGasCalculatorTimeout) {
 			clearTimeout(solanaGasCalculatorTimeout);
@@ -16,6 +19,8 @@ const useSolanaGasCalculator = (functionName: "bitwiseOperation" | "fib" | "nthP
 		setSolanaGasCalculatorTimeout(setTimeout(async () => {
 			if (args === '') {
 				setGas('$0.00');
+				setCostInUSD(0);
+				setCostInLamports(0);
 				return;
 			}
 
@@ -25,10 +30,15 @@ const useSolanaGasCalculator = (functionName: "bitwiseOperation" | "fib" | "nthP
 				const response = await getSolanaFeeAPI(functionName, args);
 				if (response.error) {
 					setGas('-');
+					setCostInUSD(0);
+					setCostInLamports(0);
 					setError(true)
 					return;
 				}
 				setError(false);
+				if (solUsdPrice) setCostInUSD(Number(solUsdPrice / BigInt(LAMPORTS_PER_SOL) * BigInt(response.gas))/ LAMPORTS_PER_SOL);
+				else setCostInLamports(Number(response.gas));
+
 				setGas(solUsdPrice ?
 					"$" + (Number(solUsdPrice / BigInt(LAMPORTS_PER_SOL) * BigInt(response.gas)) / LAMPORTS_PER_SOL).toFixed(7) :
 					BigInt(response.gas).toString() + ' lamports');
@@ -49,7 +59,7 @@ const useSolanaGasCalculator = (functionName: "bitwiseOperation" | "fib" | "nthP
 		SolanaGasCalculator();
 	}, [SolanaGasCalculator]);
 
-	return {gas, error}
+	return {gas, error, costInUSD, costInLamports};
 }
 
 export default useSolanaGasCalculator;
