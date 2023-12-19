@@ -7,10 +7,14 @@ import useCostEfficiency from "../contexts/CostEfficiency/useCostEfficiency.ts";
 const TableForFibonacci = () => {
 	const [fibonacciNth, setFibonacciNth] = useState('');
 
-	const {gas: ETHGasFor5} = useETHGasCalculator("fibonacci", '5', fibonacciNth);
-	const {gas: ETHGasFor10} = useETHGasCalculator("fibonacci", '10', fibonacciNth);
-	const {gas: ETHGasFor15} = useETHGasCalculator("fibonacci", '15', fibonacciNth);
-	const {gas: ETHGasForN, error: errorForETHFibN} = useETHGasCalculator("fibonacci", fibonacciNth);
+	const {gas: ETHGasFor5, costInUSD: ETHCostInUSDFor5} = useETHGasCalculator("fibonacci", '5', fibonacciNth);
+	const {gas: ETHGasFor10, costInUSD: ETHCostInUSDFor10} = useETHGasCalculator("fibonacci", '10', fibonacciNth);
+	const {gas: ETHGasFor15, costInUSD: ETHCostInUSDFor15} = useETHGasCalculator("fibonacci", '15', fibonacciNth);
+	const {
+		gas: ETHGasForN,
+		costInUSD: ETHCostInUSDForN,
+		error: errorForETHFibN
+	} = useETHGasCalculator("fibonacci", fibonacciNth);
 
 	const {gas: solanaGasFor5} = useSolanaGasCalculator("fib", '5', fibonacciNth);
 	const {gas: solanaGasFor10} = useSolanaGasCalculator("fib", '10', fibonacciNth);
@@ -46,39 +50,42 @@ const TableForFibonacci = () => {
 			<tbody className='bg-element-body py-2.5'>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 5</td>
-				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
+				<td
+					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor5}
 					<span
-						className='italic text-sm text-red font-semibold'> (+62%)</span></td>
+						className='italic text-sm text-red font-semibold'> ({pionPrice && ((ETHCostInUSDFor5 - pionPrice) / pionPrice * 100).toFixed(1)}%)</span>
+				</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasFor5}
-					<span
-						className='italic text-sm text-red font-semibold'> (+386%)</span></td>
+					</td>
 			</tr>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 10</td>
-				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
+				<td
+					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor10}
 					<span
-						className='italic text-sm text-red font-semibold'> (+62%)</span></td>
+						className='italic text-sm text-red font-semibold'> ({pionPrice && ((ETHCostInUSDFor10 - pionPrice) / pionPrice * 100).toFixed(1)}%)</span>
+				</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasFor10}
-					<span
-						className='italic text-sm text-red font-semibold'> (+386%)</span></td>
+					</td>
 			</tr>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 15</td>
-				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
+				<td
+					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor15}
 					<span
-						className='italic text-sm text-red font-semibold'> (+62%)</span></td>
+						className='italic text-sm text-red font-semibold'> ({pionPrice && ((ETHCostInUSDFor15 - pionPrice) / pionPrice * 100).toFixed(1)}%)</span>
+				</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasFor15}
-					<span
-						className='italic text-sm text-red font-semibold'> (+386%)</span></td>
+					</td>
 			</tr>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 				<td className='font-medium border-b border-table-body-border px-9'> <span
@@ -89,18 +96,17 @@ const TableForFibonacci = () => {
 					onClick={(e) => selectInput(e.target as HTMLInputElement)}
 					className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-32 rounded-md text-center'
 					placeholder='0'/></td>
-				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
+				<td
+					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>
 					{errorForETHFibN ? <p className='text-red text-xs font-medium'>Calculation Error!</p> : '≈ ' + ETHGasForN}
-					{!errorForETHFibN && <span
-              className='italic text-sm text-red font-semibold'> (+62%)</span>}
+					{!errorForETHFibN && fibonacciNth !== '' && <span
+              className='italic text-sm text-red font-semibold'> ({pionPrice && ((ETHCostInUSDForN - pionPrice) / pionPrice * 100).toFixed(1)}%)</span>}
 				</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>
 					{errorForSolanaFibN ?
 						<p className='text-red text-xs font-medium'>Calculation Error!</p> : '≈ ' + solanaGasForN}
-					{!errorForSolanaFibN && <span
-              className='italic text-sm text-red font-semibold'> (+386%)</span>}
 				</td>
 			</tr>
 
