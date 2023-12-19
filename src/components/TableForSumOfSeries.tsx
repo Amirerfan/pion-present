@@ -62,7 +62,7 @@ const TableForSumOfSeries = () => {
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor5}
 					<span
-						className='italic text-sm text-red font-semibolds'> ({pionPrice && ((ETHCostInUSDFor5 - pionPrice) / pionPrice * 100).toFixed(3)}%)</span>
+						className='italic text-sm text-red font-semibolds'> ({pionPrice && ((ETHCostInUSDFor5 - pionPrice) / pionPrice * 100).toFixed(1)}%)</span>
 				</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasFor5}</td>
@@ -74,7 +74,7 @@ const TableForSumOfSeries = () => {
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor10}
 					<span
-						className='italic text-sm text-red font-semibolds'> ({pionPrice && ((ETHCostInUSDFor10 - pionPrice) / pionPrice * 100).toFixed(3)}%)</span>
+						className='italic text-sm text-red font-semibolds'> ({pionPrice && ((ETHCostInUSDFor10 - pionPrice) / pionPrice * 100).toFixed(1)}%)</span>
 				</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasFor10}</td>
@@ -86,7 +86,7 @@ const TableForSumOfSeries = () => {
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor15}
 					<span
-						className='italic text-sm text-red font-semibolds'> ({pionPrice && ((ETHCostInUSDFor15 - pionPrice) / pionPrice * 100).toFixed(3)}%)</span>
+						className='italic text-sm text-red font-semibolds'> ({pionPrice && ((ETHCostInUSDFor15 - pionPrice) / pionPrice * 100).toFixed(1)}%)</span>
 				</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {solanaGasFor15}</td>
@@ -105,7 +105,7 @@ const TableForSumOfSeries = () => {
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>
 					{errorForETHSumN ? <p className='text-red text-xs font-medium'>Calculation Error!</p> : '≈ ' + ETHGasForN}
 					{!errorForETHSumN && sumOfSeriesN !== '' && <span
-              className='italic text-sm text-red font-semibold'>({pionPrice && ((ETHCostInUSDForN - pionPrice) / pionPrice * 100).toFixed(3)}%)</span>}
+              className='italic text-sm text-red font-semibold'>({pionPrice && ((ETHCostInUSDForN - pionPrice) / pionPrice * 100).toFixed(1)}%)</span>}
 				</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>
