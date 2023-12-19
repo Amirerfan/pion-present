@@ -1,6 +1,7 @@
 import useETHGasCalculator from "../hooks/useETHGasCalculator.ts";
 import {useState} from "react";
 import useSolanaGasCalculator from "../hooks/useSolanaGasCalculator.ts";
+import useCostEfficiency from "../contexts/CostEfficiency/useCostEfficiency.ts";
 
 
 const TableForFibonacci = () => {
@@ -15,6 +16,8 @@ const TableForFibonacci = () => {
 	const {gas: solanaGasFor10} = useSolanaGasCalculator("fib", '10', fibonacciNth);
 	const {gas: solanaGasFor15} = useSolanaGasCalculator("fib", '15', fibonacciNth);
 	const {gas: solanaGasForN, error: errorForSolanaFibN} = useSolanaGasCalculator("fib", fibonacciNth);
+
+	const {pionPrice} = useCostEfficiency();
 
 	const selectInput = (input: HTMLInputElement) => {
 		input.select();
@@ -43,7 +46,7 @@ const TableForFibonacci = () => {
 			<tbody className='bg-element-body py-2.5'>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 5</td>
-				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
+				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor5}
 					<span
@@ -55,7 +58,7 @@ const TableForFibonacci = () => {
 			</tr>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 10</td>
-				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
+				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor10}
 					<span
@@ -67,7 +70,7 @@ const TableForFibonacci = () => {
 			</tr>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 15</td>
-				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
+				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor15}
 					<span
@@ -86,7 +89,7 @@ const TableForFibonacci = () => {
 					onClick={(e) => selectInput(e.target as HTMLInputElement)}
 					className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-32 rounded-md text-center'
 					placeholder='0'/></td>
-				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $3.21</td>
+				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>
 					{errorForETHFibN ? <p className='text-red text-xs font-medium'>Calculation Error!</p> : '≈ ' + ETHGasForN}
 					{!errorForETHFibN && <span

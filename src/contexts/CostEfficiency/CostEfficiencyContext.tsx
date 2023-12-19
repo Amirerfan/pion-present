@@ -5,12 +5,13 @@ import {ethUsdAbi} from "../../abis/ETH_USD.ts";
 import {solUsdAbi} from "../../abis/SOL_USD.ts";
 import {bnbUsdAbi} from "../../abis/BNB_USD.ts";
 import {pionWbnbAbi} from "../../abis/PION_WBNB.ts";
+import {formatUnits} from "ethers";
 
 const CostEfficiencyContext = createContext<{
 	ethUsdPrice: null | bigint;
 	solUsdPrice: null | bigint;
 	bnbUsdPrice: null | bigint;
-	pionPrice: null | bigint;
+	pionPrice: null | number;
 	hoverState: boolean;
 	setHoverState: (hoverState: boolean) => void;
 }>({
@@ -26,11 +27,11 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 	const [ethUsdPrice, setEthUsdPrice] = useState<null | bigint>(null);
 	const [solUsdPrice, setSolUsdPrice] = useState<null | bigint>(null);
 	const [bnbUsdPrice, setBnbUsdPrice] = useState<null | bigint>(null);
-	const [pionWbnbPrice, setPionWbnbPrice] = useState<null | bigint>(null);
+	const [pionWbnbPrice, setPionWbnbPrice] = useState<null | number>(null);
 
 	const pionPrice = useMemo(() => {
 		if (bnbUsdPrice && pionWbnbPrice) {
-			return bnbUsdPrice * pionWbnbPrice / 10n ** 18n;
+			return Number(bnbUsdPrice) * pionWbnbPrice / 10 ** 8;
 		}
 		return null;
 	}, [bnbUsdPrice, pionWbnbPrice])
@@ -81,11 +82,11 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 			}
 			if (data[3].status === 'success') {
 				const reserves = data[3].result;
-				const wbnbReserve = reserves[1];
 				const pionReserve = reserves[0];
-				const wbnbReserveInEth = wbnbReserve * 10n ** 18n / 10n ** 9n;
-				const pionReserveInEth = pionReserve * 10n ** 18n / 10n ** 9n;
-				const pionWbnbPrice = wbnbReserveInEth / pionReserveInEth;
+				const wbnbReserve = reserves[1];
+				const wbnbReserveInEth = formatUnits(wbnbReserve, 'wei');
+				const pionReserveInEth = formatUnits(pionReserve, 'wei');
+				const pionWbnbPrice = Number(wbnbReserveInEth) / Number(pionReserveInEth);
 				setPionWbnbPrice(pionWbnbPrice);
 			}
 		}
