@@ -1,6 +1,7 @@
 import {useState} from "react";
 import useETHGasCalculator from "../hooks/useETHGasCalculator.ts";
 import useSolanaGasCalculator from "../hooks/useSolanaGasCalculator.ts";
+import useCostEfficiency from "../contexts/CostEfficiency/useCostEfficiency.ts";
 
 
 const TableForSumOfSeries = () => {
@@ -16,6 +17,8 @@ const TableForSumOfSeries = () => {
 	const {gas: solanaGasFor15, costInUSD: solanaCostInUSDFor15} = useSolanaGasCalculator("sumOfNaturalNumbers", '15', sumOfSeriesN);
 	const {gas: solanaGasForN, error: errorForSolanaSumN, costInUSD: solanaCostInUSDForN} = useSolanaGasCalculator("sumOfNaturalNumbers", sumOfSeriesN);
 
+
+	const {pionPrice} = useCostEfficiency();
 
 	const selectInput = (input: HTMLInputElement) => {
 		input.select();
@@ -44,7 +47,7 @@ const TableForSumOfSeries = () => {
 			<tbody className='bg-element-body py-2.5'>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 5</td>
-				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $0.186</td>
+				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$ ' + pionPrice.toString() : "-"}</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor5}
 					<span
@@ -56,7 +59,7 @@ const TableForSumOfSeries = () => {
 			</tr>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 10</td>
-				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $0.186</td>
+				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$ ' + pionPrice.toString() : "-"}</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor10}
 					<span
@@ -68,7 +71,7 @@ const TableForSumOfSeries = () => {
 			</tr>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
 				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 15</td>
-				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $0.186</td>
+				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$ ' + pionPrice.toString() : "-"}</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {ETHGasFor15}
 					<span
@@ -87,7 +90,7 @@ const TableForSumOfSeries = () => {
 					value={sumOfSeriesN}
 					className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-32 rounded-md text-center'
 					placeholder='0'/></td>
-				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ $0.186</td>
+				<td className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$ ' + pionPrice.toString() : "-"}</td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>
 					{errorForETHSumN ? <p className='text-red text-xs font-medium'>Calculation Error!</p> : '≈ ' + ETHGasForN}
 					{!errorForETHSumN && <span

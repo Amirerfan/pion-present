@@ -7,7 +7,7 @@ import {
 	RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import {configureChains, createConfig, mainnet, WagmiConfig} from 'wagmi';
-import {goerli} from 'wagmi/chains';
+import {bsc, goerli} from 'wagmi/chains';
 import {jsonRpcProvider} from 'wagmi/providers/jsonRpc';
 
 const Web3Context = createContext({});
@@ -20,13 +20,15 @@ const Web3Provider = ({children}: { children: ReactNode }) => {
 				return 'https://ethereum.publicnode.com';
 			case 5:
 				return 'https://ethereum-goerli.publicnode.com';
+			case 56:
+				return 'https://bsc.publicnode.com';
 			default:
 				return 'https://ethereum-goerli.publicnode.com';
 		}
 	}, []);
 
 	const {chains, publicClient} = configureChains(
-		[mainnet, goerli],
+		[mainnet, goerli, bsc],
 		[
 			jsonRpcProvider({
 				rpc: (chain) => ({
