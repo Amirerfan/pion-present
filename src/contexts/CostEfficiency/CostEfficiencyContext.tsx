@@ -3,15 +3,18 @@ import {createContext, ReactNode, useEffect, useState} from 'react';
 import {useContractReads} from "wagmi";
 import {ethUsdAbi} from "../../abis/ETH_USD.ts";
 import {solUsdAbi} from "../../abis/SOL_USD.ts";
+import {bnbUsdAbi} from "../../abis/BNB_USD.ts";
 
 const CostEfficiencyContext = createContext<{
 	ethUsdPrice: null | bigint;
 	solUsdPrice: null | bigint;
+	bnbUsdPrice: null | bigint;
 	hoverState: boolean;
 	setHoverState: (hoverState: boolean) => void;
 }>({
 	ethUsdPrice: null,
 	solUsdPrice: null,
+	bnbUsdPrice: null,
 	hoverState: false,
 	setHoverState: () => {},
 });
@@ -19,6 +22,7 @@ const CostEfficiencyContext = createContext<{
 const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 	const [ethUsdPrice, setEthUsdPrice] = useState<null | bigint>(null);
 	const [solUsdPrice, setSolUsdPrice] = useState<null | bigint>(null);
+	const [bnbUsdPrice, setBnbUsdPrice] = useState<null | bigint>(null);
 	const [hoverState, setHoverState] = useState(false);
 
 
@@ -35,6 +39,12 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 				abi: solUsdAbi,
 				functionName: 'latestAnswer',
 				chainId: 1,
+			},
+			{
+				address: '0x14e613ac84a31f709eadbdf89c6cc390fdc9540a',
+				abi: bnbUsdAbi,
+				functionName: 'latestAnswer',
+				chainId: 1,
 			}
 		],
 		watch: true,
@@ -48,6 +58,9 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 			if (data[1].status === 'success') {
 				setSolUsdPrice(data[1].result)
 			}
+			if (data[2].status === 'success') {
+				setBnbUsdPrice(data[2].result)
+			}
 		}
 	}, [data]);
 
@@ -57,6 +70,7 @@ const CostEfficiencyProvider = ({children}: { children: ReactNode }) => {
 			value={{
 				ethUsdPrice,
 				solUsdPrice,
+				bnbUsdPrice,
 				hoverState,
 				setHoverState
 			}}
