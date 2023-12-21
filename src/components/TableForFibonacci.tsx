@@ -97,7 +97,7 @@ const TableForFibonacci = () => {
 					className='bg-input-bg text-white focus:outline-0 px-2 py-1.5 text-[16px] w-32 rounded-md text-center'
 					placeholder='0'/></td>
 				<td
-					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
+					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {fibonacciNth === '' ? "$ 0.00" : pionPrice ? '$' + pionPrice.toFixed(2) : '-'}</td>
 				<td className='px-9 font-semibold border-b border-table-body-border text-center'>
 					{errorForETHFibN ? <p className='text-red text-xs font-medium'>Calculation Error!</p> : '≈ ' + ETHGasForN}
 					{!errorForETHFibN && fibonacciNth !== '' && <span
