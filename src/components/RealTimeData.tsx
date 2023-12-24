@@ -149,17 +149,17 @@ const RealTimeData = () => {
 				</div>
 			</section>
 
-			<span id='animated-link-real-time'
-			      className='animate-link absolute bottom-0 translate-y-1/2 hover:translate-y-14 transition-all group'>
-				<div
-					className='cursor-pointer flex flex-col gap-4 relative w-60 h-60 group-hover:w-64 group-hover:h-64 transition-all items-center justify-center '>
-				<div className='pion-logo w-11 h-[52px] transition-all group-hover:bg-primary-l1 bg-white'/>
-				<h3
-					className='font-medium text-[28px] leading-[28px] text-white text-center transition-all group-hover:text-3xl group-hover:leading-[30px] group-hover:text-primary-l1'>More About<br/>PION</h3>
-				</div>
-				<span
-					className='animated-border absolute top-0 w-full h-full border-4 border-dashed rounded-full border-primary-l1 pointer-events-none transition-all group-hover:rotate-[60deg]'></span>
-				</span>
+			{/*<span id='animated-link-real-time'*/}
+			{/*      className='animate-link absolute bottom-0 translate-y-1/2 hover:translate-y-14 transition-all group'>*/}
+			{/*	<div*/}
+			{/*		className='cursor-pointer flex flex-col gap-4 relative w-60 h-60 group-hover:w-64 group-hover:h-64 transition-all items-center justify-center '>*/}
+			{/*	<div className='pion-logo w-11 h-[52px] transition-all group-hover:bg-primary-l1 bg-white'/>*/}
+			{/*	<h3*/}
+			{/*		className='font-medium text-[28px] leading-[28px] text-white text-center transition-all group-hover:text-3xl group-hover:leading-[30px] group-hover:text-primary-l1'>More About<br/>PION</h3>*/}
+			{/*	</div>*/}
+			{/*	<span*/}
+			{/*		className='animated-border absolute top-0 w-full h-full border-4 border-dashed rounded-full border-primary-l1 pointer-events-none transition-all group-hover:rotate-[60deg]'></span>*/}
+			{/*	</span>*/}
 		</div>
 	)
 }

@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 'use client';
 
@@ -21,19 +21,21 @@ const CostEfficiency = () => {
 		});
 	}, [setHoverState]);
 
+	const [isSlideActive, setIsSlideActive] = useState(true);
+
 	return (
 		<div id='cost-efficiency'
 		     className='cost-efficiency flex flex-col w-full gap-2 h-full items-center relative justify-center'>
 
-			<div className={`max-w-[90vw] w-full transition-all ${hoverState && '-translate-y-16'}`}>
-			<p className='text-white w-[80%] mx-auto text-xl font-bold text-left'>PION enables you to get Real-time data in a secure and
-				decentralized way. </p>
-			</div>
+			{/*<div className={`max-w-[90vw] w-full transition-all ${hoverState && '-translate-y-16'}`}>*/}
+			{/*<p className='text-white w-[80%] mx-auto text-xl font-bold text-left'>PION enables you to get Real-time data in a secure and*/}
+			{/*	decentralized way. </p>*/}
+			{/*</div>*/}
 
-			<div className={`h-auto max-w-[90vw] transition-all ${hoverState && '-translate-y-16'}`}>
-				<Carousel slide={false}>
-					<TableForSumOfSeries/>
-					<TableForFibonacci/>
+			<div className={`h-auto w-[90vw] max-w-[1380px] transition-all ${hoverState && '-translate-y-16'}`}>
+				<Carousel slideInterval={5000} pauseOnHover slide={isSlideActive}>
+					<TableForSumOfSeries setIsSlideActive={setIsSlideActive}/>
+					<TableForFibonacci setIsSlideActive={setIsSlideActive}/>
 				</Carousel>
 			</div>
 

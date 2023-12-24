@@ -16,7 +16,7 @@ export default {
         'primary-l3': '#CDC9FD',
         'xyz-75': '#E9EFF6BF',
         'green': '#B7F03C',
-        'body-bg': '#11070E',
+        'body-bg': '#17151C',
         'gradient-1': '#5B4FEC',
         'gradient-2': '#DFA891',
         'element-header': '#2D2B34',

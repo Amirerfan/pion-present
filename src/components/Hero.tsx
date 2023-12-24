@@ -45,9 +45,9 @@ const Hero = () => {
 					<p className='text-white text-5xl text-center'> vs </p>
 					<p className='text-white font-bold text-[68px] text-center leading-[68px]'> Blockchain </p>
 				</div>
-				<div>
-					<img src='/assets/images/home/hero-illustration.svg' alt=''/>
-				</div>
+				{/*<div>*/}
+				{/*	<img src='/assets/images/home/hero-illustration.svg' alt=''/>*/}
+				{/*</div>*/}
 			</div>
 
 			<span id='animate-link-hero' className={`animate-link absolute bottom-4 group ${hoverState && ' transition-all !translate-y-16'}`}
