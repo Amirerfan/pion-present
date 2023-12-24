@@ -81,7 +81,7 @@ const TableForSumOfSeries = (
 
 			<tbody className='bg-element-body py-2.5'>
 			<tr className='text-white pl-9 pr-8 h-12 text-[18px]'>
-				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 50,000</td>
+				<td className='border-b border-table-body-border px-9 text-primary-l1 font-noto font-bold'>N = 5,000</td>
 				<td
 					className='px-9 font-semibold border-b border-table-body-border text-center'>≈ {pionPrice ? '$' + pionPrice.toFixed(2) : "-"}</td>
 				<td

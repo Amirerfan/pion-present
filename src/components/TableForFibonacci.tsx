@@ -13,7 +13,7 @@ const TableForFibonacci = ({
 
 	const {gas: ETHGasFor10} = useETHGasCalculator("fibonacci", '10');
 	const {gas: ETHGasFor20} = useETHGasCalculator("fibonacci", '20');
-	const {gas: ETHGasFor30, error: errorForETHGasFor30} = useETHGasCalculator("fibonacci", '30', fibonacciNth);
+	const {gas: ETHGasFor30, error: errorForETHGasFor30} = useETHGasCalculator("fibonacci", '30');
 	const {
 		gas: ETHGasForN,
 		error: errorForETHFibN
